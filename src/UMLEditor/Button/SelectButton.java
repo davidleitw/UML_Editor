@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 public class SelectButton extends BaseButton {
     public SelectButton(String text) {
-        super(text);
+        super(text, "icons/icons8-mouse-80.png");
         this.RegisterClickedEvent();
     }
 

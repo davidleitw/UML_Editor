@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 public class CompositionButton extends BaseButton{
     public CompositionButton(String text) {
-        super(text);
+        super(text, "icons/icons8-archers-arrow-80.png");
         this.RegisterClickedEvent();
     }
 
