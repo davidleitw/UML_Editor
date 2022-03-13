@@ -1,5 +1,8 @@
 package Object;
 
+import java.util.ArrayList;
+
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
@@ -7,7 +10,7 @@ public class BaseObject {
     public BaseObject() {}
     public BaseObject(Point p, int depth) {
         centerCoordinate_ = p;
-        depth_ = depth;
+        this.depth = depth;
     }
 
     public Point getCenterCoordinate() {
@@ -15,13 +18,17 @@ public class BaseObject {
     }
 
     public int getDepth() {
-        return depth_;
+        return this.depth;
     }
 
     public void draw(Graphics graph) {};
 
+    public void calculateConnectPorts(Point p) {};
+
+    protected int depth;
     protected int width;
     protected int length;
-    protected int depth_ = 0;
+    protected Color defaultColor;
     protected Point centerCoordinate_;
+    protected ArrayList<Integer> connectPorts;
 }
