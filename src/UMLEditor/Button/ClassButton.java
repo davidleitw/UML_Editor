@@ -1,24 +1,24 @@
 package Button;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener; 
+import java.awt.event.MouseEvent;
+
+import Component.Canvas;
+import Object.ClassObject;
 
 public class ClassButton extends BaseButton { 
     public ClassButton(String text) {
         super(text, "icons/icons8-drawer-80.png");
-        this.RegisterClickedEvent();
     }
 
-    private void classMethod() {
-        System.out.println("This is Class Button.");
+    @Override
+    public void mousePressed(Canvas c, MouseEvent e) {
+        return;
     }
 
-    public void RegisterClickedEvent() {
-        this.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                classMethod();
-            }
-        }); 
+    @Override
+    public void mouseReleased(Canvas c, MouseEvent e) {
+        ClassObject obj = new ClassObject(e.getPoint(), 0);
+        c.addObject(obj);
+        c.repaint();
     }
 }

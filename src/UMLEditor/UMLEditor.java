@@ -1,6 +1,11 @@
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.Color;
+import java.awt.BorderLayout;
+
 import Button.*;
+import Component.ButtonToolBar;
+import Component.Canvas;
 
 public class UMLEditor extends JFrame {
     public static void main(String[] args) {
@@ -13,32 +18,35 @@ public class UMLEditor extends JFrame {
         this.setLocationRelativeTo(null);
 
         this.setLayout(new BorderLayout());
-        this.settoolBarLayout();
-
+        this.setMenuLayout();
+        this.setToolBarLayout();
+        this.setCanvasLayout();
+        
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }
 
-    private JToolBar toolBar;
-    private void settoolBarLayout() {
-        toolBar = new JToolBar("tools", JToolBar.VERTICAL);
-        toolBar.setLayout(new GridLayout(6, 1, 2, 2));
-        toolBar.setFloatable(false);
-        
-        JButton selectButton = new SelectButton("Select");
-        JButton associationButton = new AssociationButton("Association");
-        JButton generalicationButton = new GeneralizationButton("Generalization");
-        JButton compositionButton = new CompositionButton("Composition");
-        JButton classButton = new ClassButton("Class");
-        JButton caseButton = new UseCaseButton("Use case");
+    private ButtonToolBar toolBar_;
+    private void setToolBarLayout() {
+        toolBar_ = new ButtonToolBar("tools", JToolBar.VERTICAL);
 
-        toolBar.add(selectButton);
-        toolBar.add(associationButton);
-        toolBar.add(generalicationButton);
-        toolBar.add(compositionButton);
-        toolBar.add(classButton);
-        toolBar.add(caseButton);
+        toolBar_.registerBtn(new SelectButton("Select"));
+        toolBar_.registerBtn(new AssociationButton("Association"));
+        toolBar_.registerBtn(new GeneralizationButton("Generalization"));
+        toolBar_.registerBtn(new CompositionButton("Composition"));
+        toolBar_.registerBtn(new ClassButton("Class"));
+        toolBar_.registerBtn(new UseCaseButton("Use case"));
 
-        this.add(toolBar, BorderLayout.WEST);
+        this.add(toolBar_, BorderLayout.WEST);
+    }
+
+    private void setCanvasLayout() {
+        JPanel panel = new Canvas(this.toolBar_);
+        panel.setBackground(new Color(255, 255, 255));
+        this.add(panel, BorderLayout.CENTER);
+    }
+
+    private void setMenuLayout() {
+
     }
 }
