@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public class ClassObject extends BaseObject {
+public class ClassObject extends BaseObject implements SelectableObject {
     public ClassObject(Point p, int depth) {
         super(p, depth);
         width = 200;
@@ -18,8 +18,8 @@ public class ClassObject extends BaseObject {
     public void draw(Graphics graph) {
         defaultColor = graph.getColor();
 
-        int x = (int)centerCoordinate_.getX();
-        int y = (int)centerCoordinate_.getY();
+        int x = (int)upperLeftCoordinate.getX();
+        int y = (int)upperLeftCoordinate.getY();
         
         graph.setColor(new Color(169, 169, 169));
         graph.fillRoundRect(x, y, width, length, round, round);
@@ -28,14 +28,18 @@ public class ClassObject extends BaseObject {
         graph.setFont(new Font(className, Font.PLAIN, 25));
         graph.drawString(className, x+20, y+40);
 
-        y += length;
         for (int i = 0; i < fieldnum; i++) {
-            graph.drawRoundRect(x, y, width, fieldlength, round, round);
-            y += fieldlength;
+            graph.drawRoundRect(x, y+length+i*fieldlength, width, fieldlength, round, round);
         }
+
+        graph.setColor(Color.RED);
+        graph.drawRect(x+(width/2)-10, y-20, 20, 20);
+        graph.drawRect(x+(width/2)-10, y+length+fieldnum*fieldlength, 20, 20);
+        graph.drawRect(x-20, y+(length+fieldnum*fieldlength)/2, 20, 20);
+        graph.drawRect(x+width, y+(length+fieldnum*fieldlength)/2, 20, 20);
+        graph.setColor(defaultColor);
     }
 
-    @Override
     public void calculateConnectPorts(Point p) {
         
     }
