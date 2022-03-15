@@ -26,8 +26,12 @@ public class ClassObject extends BaseObject implements SelectableObject {
         graph.setFont(new Font(className, Font.PLAIN, 25));
         graph.drawString(className, lx+20, ly+40);
 
+        
         for (int i = 0; i < fieldnum; i++) {
-            graph.drawRoundRect(lx, ly+length+i*fieldlength, width, fieldlength, round, round);
+            graph.setColor(new Color(177, 192, 213));
+            graph.fillRoundRect(lx, ly+length+i*fieldlength, width-1, fieldlength-1, round, round);
+            graph.setColor(defaultColor);
+            graph.drawRoundRect(lx, ly+length+i*fieldlength, width-1, fieldlength-1, round, round);
         }
 
         if (this.getState() == true) {

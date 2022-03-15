@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
@@ -43,7 +45,6 @@ public class Canvas extends JPanel {
         if (toolBar.getCurrentBtn() == null) {
             return;
         }
-
         toolBar.getCurrentBtn().mousePressed(this, e);
     }
 
@@ -51,7 +52,6 @@ public class Canvas extends JPanel {
         if (toolBar.getCurrentBtn() == null) {
             return;
         }
-
         toolBar.getCurrentBtn().mouseReleased(this, e);
     }
 
@@ -59,7 +59,6 @@ public class Canvas extends JPanel {
         if (toolBar.getCurrentBtn() == null) {
             return;
         }
-
         toolBar.getCurrentBtn().mouseDragged(this, e);
     }
 
@@ -97,9 +96,27 @@ public class Canvas extends JPanel {
         graph.fillRect(0, 0, getSize().width, getSize().height);
         graph.setColor(defaultBoard);
 
+        if (getStrategy().getSelectAreaExist()) {
+            graph.setColor(new Color(20, 20, 10));
+            Graphics2D graph2D = (Graphics2D)graph;
+            graph2D.setStroke(new BasicStroke(2));
+            graph.drawRoundRect(getStrategy().originPoint.x, 
+                           getStrategy().originPoint.y,
+                           getStrategy().offsetX,
+                           getStrategy().offsetY, 20, 20);
+            
+            graph.setColor(new Color(145, 209, 181));
+            graph.fillRoundRect(getStrategy().originPoint.x, 
+                           getStrategy().originPoint.y,
+                           getStrategy().offsetX,
+                           getStrategy().offsetY, 20, 20);
+            graph.setColor(defaultBoard);
+        }
+
         for (int i = 0; i < BaseObjects.size(); i++) {
             BaseObjects.get(i).draw(graph);
         }
+
     }
     
     private Color clearBoard;
@@ -119,6 +136,11 @@ public class Canvas extends JPanel {
     }
 
     public class Strategy {
+        public void addSelectableObject(BaseObject obj) {
+            BaseObjects.add(obj);
+            repaint();
+        }
+
         public void selectObjectByPoint(Point p) {
             int x = p.x;
             int y = p.y;
@@ -127,7 +149,7 @@ public class Canvas extends JPanel {
             for (BaseObject obj: BaseObjects) {
                 if (obj.include(x, y)) {
                     selectObj = obj;
-                }        
+                }     
             }
 
             if (selectObj != null) {
@@ -141,9 +163,23 @@ public class Canvas extends JPanel {
             selectingObject = selectObj;
             repaint();
         }
+        
+        private boolean selectArea;
+        public void setSelectArea(boolean exist) {
+            selectArea = exist;
+        }
 
-        public void addSelectableObject(BaseObject obj) {
-            BaseObjects.add(obj);
+        public boolean getSelectAreaExist() {
+            return selectArea;
+        }
+
+        private Point originPoint;
+        private int offsetX;
+        private int offsetY;
+        public void selectObjectByArea(Point origin, Point p) {
+            originPoint = origin;
+            offsetX = p.x - originPoint.x;
+            offsetY = p.y - originPoint.y;
             repaint();
         }
     }
