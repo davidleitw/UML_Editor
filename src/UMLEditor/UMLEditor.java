@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.BorderLayout;
 
 import Button.*;
+import EventHandler.*;
 import Component.ButtonToolBar;
 import Component.Canvas;
 
@@ -30,12 +31,12 @@ public class UMLEditor extends JFrame {
     private void setToolBarLayout() {
         toolBar_ = new ButtonToolBar("tools", JToolBar.VERTICAL);
 
-        toolBar_.registerBtn(new SelectButton("Select"));
-        toolBar_.registerBtn(new AssociationButton("Association"));
-        toolBar_.registerBtn(new GeneralizationButton("Generalization"));
-        toolBar_.registerBtn(new CompositionButton("Composition"));
-        toolBar_.registerBtn(new ClassButton("Class"));
-        toolBar_.registerBtn(new UseCaseButton("Use case"));
+        toolBar_.registerBtn(new BaseButton("Select", "icons/icons8-mouse-80.png", new selectHandler()));
+        toolBar_.registerBtn(new BaseButton("Association", "icons/icons8-arrow-64.png", new createClassHandler()));
+        toolBar_.registerBtn(new BaseButton("Generalization", "icons/icons8-arrow-80.png", new createClassHandler()));
+        toolBar_.registerBtn(new BaseButton("Composition", "icons/icons8-archers-arrow-80.png", new createClassHandler()));
+        toolBar_.registerBtn(new BaseButton("Class", "icons/icons8-drawer-80.png", new createClassHandler()));
+        toolBar_.registerBtn(new BaseButton("Use case", "icons/icons8-oval-80.png", new createUsecaseHandler()));
 
         this.add(toolBar_, BorderLayout.WEST);
     }

@@ -14,7 +14,7 @@ public class ButtonToolBar extends JToolBar {
     }
     
     public void registerBtn(BaseButton btn) {
-        btn.bindToolBar(this);
+        btn.binding(this);
         this.add(btn);
     }
 

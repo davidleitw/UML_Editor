@@ -6,14 +6,14 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public class BaseObject {
+public abstract class BaseObject {
     public BaseObject() {}
     public BaseObject(Point p, int depth) {
         upperLeftCoordinate = p;
         this.depth = depth;
     }
 
-    public Point getCenterCoordinate() {
+    public Point getUpperLeftCoordinate() {
         return upperLeftCoordinate;
     }
 
@@ -21,13 +21,23 @@ public class BaseObject {
         return depth;
     }
 
-    public void draw(Graphics graph) {};
+    public abstract void draw(Graphics graph);
+
+    public abstract boolean include(int x, int y);
+
+    public void Selected(boolean state) {
+        beenSelected = state;
+    }
+
+    public boolean getState() {
+        return beenSelected;
+    }
 
     protected int depth;
     protected int width;
     protected int length;
+    protected boolean beenSelected;
     protected Color defaultColor;
     protected Point upperLeftCoordinate;
-    // protected Point lowerRightCoordinate;
     protected ArrayList<Integer> connectPorts;
 }

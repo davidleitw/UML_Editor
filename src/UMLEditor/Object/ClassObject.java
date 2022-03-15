@@ -10,42 +10,54 @@ public class ClassObject extends BaseObject implements SelectableObject {
         super(p, depth);
         width = 200;
         length = 80;
-
         calculateConnectPorts(p);
     }
 
     @Override
     public void draw(Graphics graph) {
         defaultColor = graph.getColor();
-
-        int x = (int)upperLeftCoordinate.getX();
-        int y = (int)upperLeftCoordinate.getY();
+        int lx = upperLeftCoordinate.x;
+        int ly = upperLeftCoordinate.y;
         
         graph.setColor(new Color(169, 169, 169));
-        graph.fillRoundRect(x, y, width, length, round, round);
+        graph.fillRoundRect(lx, ly, width, length, round, round);
         graph.setColor(defaultColor);
-        graph.drawRoundRect(x, y, width, length, round, round);
+        graph.drawRoundRect(lx, ly, width, length, round, round);
         graph.setFont(new Font(className, Font.PLAIN, 25));
-        graph.drawString(className, x+20, y+40);
+        graph.drawString(className, lx+20, ly+40);
 
         for (int i = 0; i < fieldnum; i++) {
-            graph.drawRoundRect(x, y+length+i*fieldlength, width, fieldlength, round, round);
+            graph.drawRoundRect(lx, ly+length+i*fieldlength, width, fieldlength, round, round);
         }
 
-        graph.setColor(Color.RED);
-        graph.drawRect(x+(width/2)-10, y-20, 20, 20);
-        graph.drawRect(x+(width/2)-10, y+length+fieldnum*fieldlength, 20, 20);
-        graph.drawRect(x-20, y+(length+fieldnum*fieldlength)/2, 20, 20);
-        graph.drawRect(x+width, y+(length+fieldnum*fieldlength)/2, 20, 20);
-        graph.setColor(defaultColor);
+        if (this.getState() == true) {
+            int rx = lx + width;
+            int ry = ly + length + fieldnum*fieldlength;
+            
+            graph.setColor(Color.RED);
+            graph.drawRect((lx+rx)/2-10, ly-20, 20, 20);
+            graph.drawRect(lx-20, (ly+ry)/2-10, 20, 20);
+            graph.drawRect((lx+rx)/2-10, ry, 20, 20);
+            graph.drawRect(rx, (ly+ry)/2-10, 20, 20);
+            graph.setColor(defaultColor);
+        }
     }
 
     public void calculateConnectPorts(Point p) {
         
     }
 
+    public boolean include(int x, int y) {
+        return x > upperLeftCoordinate.x && x < upperLeftCoordinate.x + width
+                && y > upperLeftCoordinate.y && y < upperLeftCoordinate.y + length + fieldnum*fieldlength; 
+    } 
+
     public void setClassName(String clsname) {
         className = clsname;
+    }
+
+    public String getClassName() {
+        return className;
     }
 
     private int round = 25;
