@@ -5,12 +5,12 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public class ClassObject extends BaseObject implements SelectableObject {
+public class ClassObject extends BaseObject {
     public ClassObject(Point p, int depth) {
         super(p, depth);
         width = 200;
         length = 80;
-        calculateConnectPorts(p);
+        calculateLowerRight(width, length+fieldnum*fieldlength);
     }
 
     @Override
@@ -47,14 +47,27 @@ public class ClassObject extends BaseObject implements SelectableObject {
         }
     }
 
-    public void calculateConnectPorts(Point p) {
-        
+    @Override
+    protected void calculateLowerRight(int w, int l) {
+        lowerRightCoordinate = new Point(upperLeftCoordinate.x+w, upperLeftCoordinate.y+l);
     }
 
-    public boolean include(int x, int y) {
+    public boolean contain(Point p) {
+        int x = p.x;
+        int y = p.y;
         return x > upperLeftCoordinate.x && x < upperLeftCoordinate.x + width
-                && y > upperLeftCoordinate.y && y < upperLeftCoordinate.y + length + fieldnum*fieldlength; 
-    } 
+                && y > upperLeftCoordinate.y && y < upperLeftCoordinate.y + length + fieldnum*fieldlength;    
+    }
+
+    public boolean contain(Point origin, Point offset) {
+        int lx = origin.x;
+        int ly = origin.y;
+        int rx = offset.x;
+        int ry = offset.y;
+        
+        return between(upperLeftCoordinate.x, lx, rx) && between(upperLeftCoordinate.y, ly, ry)
+                && between(lowerRightCoordinate.x, lx, rx) && between(lowerRightCoordinate.y, ly, ry);
+    }
 
     public void setClassName(String clsname) {
         className = clsname;

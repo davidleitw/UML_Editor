@@ -22,10 +22,11 @@ public abstract class BaseObject {
     }
 
     public abstract void draw(Graphics graph);
+    public abstract boolean contain(Point p);
+    public abstract boolean contain(Point origin, Point offset);
+    protected abstract void calculateLowerRight(int w, int l);
 
-    public abstract boolean include(int x, int y);
-
-    public void Selected(boolean state) {
+    public void select(boolean state) {
         beenSelected = state;
     }
 
@@ -33,11 +34,17 @@ public abstract class BaseObject {
         return beenSelected;
     }
 
+    public static boolean between(int origin, int left, int right) {
+        return origin >= left && origin <= right;
+    }
+
     protected int depth;
     protected int width;
     protected int length;
-    protected boolean beenSelected;
     protected Color defaultColor;
+    protected boolean beenSelected;
     protected Point upperLeftCoordinate;
+    protected Point lowerRightCoordinate;
     protected ArrayList<Integer> connectPorts;
+
 }

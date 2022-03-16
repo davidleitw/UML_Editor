@@ -7,18 +7,25 @@ import java.awt.event.MouseEvent;
 
 public class selectHandler implements eventHandler {
     public void mousePressed(Canvas c, MouseEvent e) {
-        origin = e.getPoint();
-        c.getStrategy().selectObjectByPoint(origin);
+        if (c.strategy().clearSelectObject().overlapObject(origin)) {
+            c.strategy().selectTopObject();
+        } else {
+            dragMode = true;
+            origin = e.getPoint();
+        }
     }
 
     public void mouseDragged(Canvas c, MouseEvent e) {
-        c.getStrategy().setSelectArea(true);
-        c.getStrategy().selectObjectByArea(origin, e.getPoint());
-        
+        if (dragMode) {
+            c.strategy().setSelectArea(true).clearSelectObject().selectObjectByArea(origin, e.getPoint());
+        }
+
     }
     public void mouseReleased(Canvas c, MouseEvent e) {
-        c.getStrategy().setSelectArea(false);
+        dragMode = false;
+        c.strategy().setSelectArea(false);
     }
 
     private Point origin;
+    private boolean dragMode;
 }

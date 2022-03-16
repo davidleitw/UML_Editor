@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.BasicStroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
@@ -15,7 +13,7 @@ import javax.swing.JPanel;
 
 public class Canvas extends JPanel {
     public Canvas(ButtonToolBar toolBar) {
-        this.adapter = new MouseAdapter() {
+        MouseAdapter adapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 mousePressedHandler(e);
@@ -62,125 +60,112 @@ public class Canvas extends JPanel {
         toolBar.getCurrentBtn().mouseDragged(this, e);
     }
 
-    public void addObject(BaseObject obj) {
-        BaseObjects.add(obj);
-    }
-
-    public void selectObjectByPoint(Point p) {
-        int x = p.x;
-        int y = p.y;
-        BaseObject selectObj = null;
-
-        for (BaseObject obj: BaseObjects) {
-            if (obj.include(x, y)) {
-                selectObj = obj;
-            }        
-        }
-
-        if (selectObj != null) {
-            // 將原先選擇的物件取消
-            if (this.selectingObject != null && this.selectingObject != selectObj) {
-                System.out.println("cancel selecting obj select!");
-                this.selectingObject.Selected(false);
-            }
-            // 新選擇的物件標注
-            selectObj.Selected(true);
-        }
-        this.selectingObject = selectObj;
-        repaint();
-    }
-
     @Override
     public void paint(Graphics graph) {
-        graph.setColor(clearBoard);
-        graph.fillRect(0, 0, getSize().width, getSize().height);
-        graph.setColor(defaultBoard);
-
-        if (getStrategy().getSelectAreaExist()) {
-            graph.setColor(new Color(20, 20, 10));
-            Graphics2D graph2D = (Graphics2D)graph;
-            graph2D.setStroke(new BasicStroke(2));
-            graph.drawRoundRect(getStrategy().originPoint.x, 
-                           getStrategy().originPoint.y,
-                           getStrategy().offsetX,
-                           getStrategy().offsetY, 20, 20);
-            
-            graph.setColor(new Color(145, 209, 181));
-            graph.fillRoundRect(getStrategy().originPoint.x, 
-                           getStrategy().originPoint.y,
-                           getStrategy().offsetX,
-                           getStrategy().offsetY, 20, 20);
-            graph.setColor(defaultBoard);
-        }
-
-        for (int i = 0; i < BaseObjects.size(); i++) {
-            BaseObjects.get(i).draw(graph);
-        }
-
+        strategy().paint(graph);
     }
-    
+
     private Color clearBoard;
     private Color defaultBoard;
-
-    public MouseAdapter adapter; 
-    private BaseObject selectingObject;
-    private ArrayList<BaseObject> BaseObjects;
     private ButtonToolBar toolBar;
+    private ArrayList<BaseObject> BaseObjects;
     private Strategy strategy = null;
     
-    
-    public Strategy getStrategy() {
+    public Strategy strategy() {
         if (strategy == null) 
             strategy = new Strategy();
         return strategy;
     }
 
     public class Strategy {
-        public void addSelectableObject(BaseObject obj) {
+        public Strategy() {
+            selectingObjects = new ArrayList<BaseObject>();
+        }
+
+        public void paint(Graphics graph) {
+            graph.setColor(clearBoard);
+            graph.fillRect(0, 0, getSize().width, getSize().height);
+            graph.setColor(defaultBoard);
+
+            if (selectAreaExist()) {
+                int lx = originPoint.x;
+                int ly = originPoint.y;
+                int offsetx = offsetPoint.x - lx;
+                int offsety = offsetPoint.y - ly;
+
+                graph.drawRoundRect(lx, ly, offsetx, offsety, 20, 20);
+                graph.setColor(new Color(145, 209, 181));
+                graph.fillRoundRect(lx, ly, offsetx, offsety, 20, 20);
+                graph.setColor(defaultBoard);
+            }
+
+            for (int i = 0; i < BaseObjects.size(); i++) {
+                BaseObjects.get(i).draw(graph);
+            }
+        }
+
+        public Strategy addSelectableObject(BaseObject obj) {
             BaseObjects.add(obj);
             repaint();
-        }
-
-        public void selectObjectByPoint(Point p) {
-            int x = p.x;
-            int y = p.y;
-            BaseObject selectObj = null;
-
-            for (BaseObject obj: BaseObjects) {
-                if (obj.include(x, y)) {
-                    selectObj = obj;
-                }     
-            }
-
-            if (selectObj != null) {
-                // 將原先選擇的物件取消
-                if (selectingObject != null && selectingObject != selectObj) {
-                    selectingObject.Selected(false);
-                }
-                // 新選擇的物件標注
-                selectObj.Selected(true);
-            }
-            selectingObject = selectObj;
-            repaint();
+            return this;
         }
         
-        private boolean selectArea;
-        public void setSelectArea(boolean exist) {
+        public Strategy setSelectArea(boolean exist) {
             selectArea = exist;
+            repaint();
+            return this;
         }
 
-        public boolean getSelectAreaExist() {
+        private boolean selectAreaExist() {
             return selectArea;
         }
 
-        private Point originPoint;
-        private int offsetX;
-        private int offsetY;
-        public void selectObjectByArea(Point origin, Point p) {
-            originPoint = origin;
-            offsetX = p.x - originPoint.x;
-            offsetY = p.y - originPoint.y;
+        public boolean overlapObject(Point p) {
+            boolean overlap = false;
+            for (BaseObject object: BaseObjects) {
+                if (object.contain(p)) {
+                    overlap = true;
+                    topSelectObject = object;
+                }
+            }
+            return overlap;
+        }
+
+        public void selectTopObject() {
+            topSelectObject.select(true);
             repaint();
         }
+
+        public Strategy clearSelectObject() {
+            if (topSelectObject != null) {
+                topSelectObject.select(false);
+            }
+
+            for (BaseObject selectobj: selectingObjects) {
+                selectobj.select(false);
+            }
+            selectingObjects.clear();
+            repaint();
+            return this;
+        }
+
+        public void selectObjectByArea(Point origin, Point offset) {
+            originPoint = origin;
+            offsetPoint = offset;
+
+            for (BaseObject object: BaseObjects) {
+                if (object.contain(origin, offset)) {
+                    object.select(true);
+                    selectingObjects.add(object);
+                }
+            }
+            repaint();
+        }
+
+        private Point originPoint;
+        private Point offsetPoint;
+        private boolean selectArea;
+        private BaseObject topSelectObject;
+        private ArrayList<BaseObject> selectingObjects;
     }
 }
