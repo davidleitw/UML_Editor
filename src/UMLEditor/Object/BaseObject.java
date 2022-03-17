@@ -13,10 +13,6 @@ public abstract class BaseObject {
         this.depth = depth;
     }
 
-    public void move(Point p) {
-        metaCoordinate = p;
-    }
-
     public int getDepth() {
         return depth;
     }
@@ -33,6 +29,7 @@ public abstract class BaseObject {
         return origin >= left && origin <= right;
     }
 
+    public abstract void move(Point p);
     public abstract void draw(Graphics graph);
     public abstract boolean contain(Point p);
     public abstract boolean contain(Point origin, Point offset);

@@ -52,6 +52,11 @@ public class ClassObject extends BaseObject {
         lowerRightCoordinate = new Point(metaCoordinate.x+w, metaCoordinate.y+l);
     }
 
+    public void move(Point p) {
+        metaCoordinate = p;
+        calculateLowerRight(width, length+fieldnum*fieldlength);
+    }
+
     public boolean contain(Point p) {
         int x = p.x;
         int y = p.y;
@@ -64,7 +69,7 @@ public class ClassObject extends BaseObject {
         int ly = origin.y;
         int rx = offset.x;
         int ry = offset.y;
-        
+        calculateLowerRight(width, length);
         return between(metaCoordinate.x, lx, rx) && between(metaCoordinate.y, ly, ry)
                 && between(lowerRightCoordinate.x, lx, rx) && between(lowerRightCoordinate.y, ly, ry);
     }
