@@ -10,6 +10,8 @@ public class ClassObject extends BaseObject {
         super(p, depth);
         width = 200;
         length = 80;
+        ox = metaCoordinate.x;
+        oy = metaCoordinate.y;
         calculateLowerRight(width, length + fieldnum * fieldlength);
     }
 
@@ -56,6 +58,13 @@ public class ClassObject extends BaseObject {
         calculateLowerRight(width, length + fieldnum * fieldlength);
     }
 
+    public void move(int offsetx, int offsety) {
+        System.out.printf("x = %d, y = %d\n", offsetx, offsety);
+        metaCoordinate.x = ox + offsetx;
+        metaCoordinate.y = oy + offsety;
+        calculateLowerRight(width, length + fieldnum * fieldlength);
+    }
+
     public boolean contain(Point p) {
         int x = p.x;
         int y = p.y;
@@ -80,6 +89,7 @@ public class ClassObject extends BaseObject {
         return className;
     }
 
+    private int ox, oy;
     private int round = 25;
     private int fieldnum = 3;
     private int fieldlength = 60;

@@ -30,6 +30,7 @@ public abstract class BaseObject {
     }
 
     public abstract void move(Point p);
+    public abstract void move(int offsetx, int offsety);
     public abstract void draw(Graphics graph);
     public abstract boolean contain(Point p);
     public abstract boolean contain(Point origin, Point offset);
