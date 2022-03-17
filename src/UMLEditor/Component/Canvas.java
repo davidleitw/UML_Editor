@@ -85,7 +85,7 @@ public class Canvas extends JPanel {
             graph.fillRect(0, 0, getSize().width, getSize().height);
             graph.setColor(defaultBoard);
 
-            if (draggingExist() && !selecting) {
+            if (mouseDragging() && !selecting) {
                 int lx = originPoint.x;
                 int ly = originPoint.y;
                 int offsetx = offsetPoint.x - lx;
@@ -102,44 +102,32 @@ public class Canvas extends JPanel {
             }
         }
 
-        private void debugMode() {
-            System.out.printf("origin = (%d, %d) - offset = (%d, %d) - dragging = %b - selecting = %b\n", originPoint.x,
-                    originPoint.y, offsetPoint.x, offsetPoint.y, dragging, selecting);
-        }
-
-        public Strategy addSelectableObject(BaseObject obj) {
+        public void addSelectableObject(BaseObject obj) {
             baseObjects.add(obj);
             repaint();
-            return this;
         }
 
-        public Strategy mouseDragging(boolean exist) {
+        private void setmouseDragging(boolean exist) {
             dragging = exist;
-            return this;
         }
 
-        private boolean draggingExist() {
+        private boolean mouseDragging() {
             return dragging;
         }
 
         public void selectMousePressed(Point p) {
             clearSelectObject();
-            // if (overlapObject(p)) {
-            // selecting = true;
-            // setObjectSelectTag();
-            // }
-            selecting = overlapObject(p);
+            overlapObject(p);
             repaint();
         }
 
         public void selectMouseDragged(Point origin, Point offset) {
-            mouseDragging(true);
+            setmouseDragging(true);
             originPoint = origin;
             offsetPoint = offset;
 
             if (selecting) {
                 moveSelectingObjects();
-                debugMode();
                 repaint();
                 return;
             }
@@ -151,18 +139,17 @@ public class Canvas extends JPanel {
                 }
             }
             setObjectSelectTag();
-            debugMode();
             repaint();
         }
 
         public void selectMouseReleased() {
             originPoint = null;
             offsetPoint = null;
-            mouseDragging(false);
+            setmouseDragging(false);
             repaint();
         }
 
-        public boolean overlapObject(Point p) {
+        private void overlapObject(Point p) {
             BaseObject topSelectObject = null;
             for (BaseObject object : baseObjects) {
                 if (object.contain(p)) {
@@ -174,7 +161,6 @@ public class Canvas extends JPanel {
                 selectingObjects.add(topSelectObject);
             }
             setObjectSelectTag();
-            return selecting;
         }
 
         private void setObjectSelectTag() {
@@ -183,30 +169,12 @@ public class Canvas extends JPanel {
             }
         }
 
-        public Strategy clearSelectObject() {
+        private void clearSelectObject() {
             selecting = false;
             for (BaseObject selectobj : selectingObjects) {
                 selectobj.select(false);
             }
             selectingObjects.clear();
-            return this;
-        }
-
-        public void selectObjectByArea(Point origin, Point offset) {
-            originPoint = origin;
-            offsetPoint = offset;
-            if (selecting) {
-                moveSelectingObjects();
-            } else {
-                clearSelectObject();
-                for (BaseObject object : baseObjects) {
-                    if (object.contain(origin, offset)) {
-                        selectingObjects.add(object);
-                    }
-                }
-                setObjectSelectTag();
-            }
-            repaint();
         }
 
         private void moveSelectingObjects() {
