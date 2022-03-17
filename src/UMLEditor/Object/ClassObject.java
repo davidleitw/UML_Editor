@@ -8,14 +8,12 @@ import java.awt.Graphics;
 public class ClassObject extends BaseObject {
     public ClassObject(Point p, int depth) {
         super(p, depth);
-        width = 200;
+        
         fieldnum = 3;
         fieldlength = 60;
         nameFieldlength = 80;
-        length = nameFieldlength + fieldnum * fieldlength;
-
-        nameFieldColor = new Color(169, 169, 169);
-        memberFieldColor = new Color(177, 192, 213);
+        setWidth(200);
+        setLength(nameFieldlength + fieldnum * fieldlength);
         calculateLowerRight(width, length);
     }
 
@@ -93,7 +91,8 @@ public class ClassObject extends BaseObject {
     private int fieldnum;
     private int fieldlength;
     private int nameFieldlength;
-    private Color nameFieldColor;
-    private Color memberFieldColor;
     private String className = "Class name";
+
+    private final Color nameFieldColor = new Color(169, 169, 169);
+    private final Color memberFieldColor = new Color(177, 192, 213);
 }

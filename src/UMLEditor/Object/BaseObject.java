@@ -7,12 +7,14 @@ import java.awt.Point;
 import java.awt.Graphics;
 
 public abstract class BaseObject {
-    public BaseObject() {}
+    public BaseObject() {
+    }
+
     public BaseObject(Point p, int dep) {
+        assert (p != null);
+        assert (dep >= 0);
         originx = p.x;
         originy = p.y;
-        rectRound = 25;
-        defaultBackground = new Color(16777216);
         depth = dep;
     }
 
@@ -32,13 +34,28 @@ public abstract class BaseObject {
         return origin >= left && origin <= right;
     }
 
+    public void setWidth(int w) {
+        assert (w > 0);
+        width = w;
+    }
+
+    public void setLength(int l) {
+        assert (l > 0);
+        length = l;
+    }
+
     public abstract void move(Point p);
+
     public abstract void move(int offsetx, int offsety);
+
     public abstract void draw(Graphics graph);
+
     public abstract boolean contain(Point p);
+
     public abstract boolean contain(Point p1, Point p2);
+
     protected abstract void calculateLowerRight(int w, int l);
-    
+
     protected int depth;
     protected Point lowerRightCoordinate;
     protected ArrayList<Integer> connectPorts;
@@ -47,7 +64,7 @@ public abstract class BaseObject {
     protected int length;
     protected int originx;
     protected int originy;
-    protected int rectRound;
     protected boolean selected;
-    protected Color defaultBackground;
+    protected final int rectRound = 25;
+    protected final Color defaultBackground = new Color(16777216);
 }
