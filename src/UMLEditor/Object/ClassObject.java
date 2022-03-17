@@ -9,89 +9,91 @@ public class ClassObject extends BaseObject {
     public ClassObject(Point p, int depth) {
         super(p, depth);
         width = 200;
-        length = 80;
-        ox = metaCoordinate.x;
-        oy = metaCoordinate.y;
-        calculateLowerRight(width, length + fieldnum * fieldlength);
+        fieldnum = 3;
+        fieldlength = 60;
+        nameFieldlength = 80;
+        length = nameFieldlength + fieldnum * fieldlength;
+
+        nameFieldColor = new Color(169, 169, 169);
+        memberFieldColor = new Color(177, 192, 213);
+        calculateLowerRight(width, length);
     }
 
     @Override
     public void draw(Graphics graph) {
-        defaultColor = graph.getColor();
-        int lx = metaCoordinate.x;
-        int ly = metaCoordinate.y;
-
-        graph.setColor(new Color(169, 169, 169));
-        graph.fillRoundRect(lx, ly, width, length, round, round);
-        graph.setColor(defaultColor);
-        graph.drawRoundRect(lx, ly, width, length, round, round);
+        graph.setColor(nameFieldColor);
+        graph.fillRoundRect(originx, originy, width, nameFieldlength, rectRound, rectRound);
+        graph.setColor(defaultBackground);
+        graph.drawRoundRect(originx, originy, width, nameFieldlength, rectRound, rectRound);
         graph.setFont(new Font(className, Font.PLAIN, 25));
-        graph.drawString(className, lx + 20, ly + 40);
+        graph.drawString(className, originx + 20, originy + 40);
 
         for (int i = 0; i < fieldnum; i++) {
-            graph.setColor(new Color(177, 192, 213));
-            graph.fillRoundRect(lx, ly + length + i * fieldlength, width - 1, fieldlength - 1, round, round);
-            graph.setColor(defaultColor);
-            graph.drawRoundRect(lx, ly + length + i * fieldlength, width - 1, fieldlength - 1, round, round);
+            graph.setColor(memberFieldColor);
+            graph.fillRoundRect(originx, originy + nameFieldlength + i * fieldlength, width - 1, fieldlength - 1, rectRound,
+                    rectRound);
+            graph.setColor(defaultBackground);
+            graph.drawRoundRect(originx, originy + nameFieldlength + i * fieldlength, width - 1, fieldlength - 1, rectRound,
+                    rectRound);
         }
 
-        if (this.isSelected() == true) {
-            int rx = lx + width;
-            int ry = ly + length + fieldnum * fieldlength;
+        if (this.IsSelected() == true) {
+            int rx = originx + width;
+            int ry = originy + nameFieldlength + fieldnum * fieldlength;
 
             graph.setColor(Color.RED);
-            graph.drawRect((lx + rx) / 2 - 10, ly - 20, 20, 20);
-            graph.drawRect(lx - 20, (ly + ry) / 2 - 10, 20, 20);
-            graph.drawRect((lx + rx) / 2 - 10, ry, 20, 20);
-            graph.drawRect(rx, (ly + ry) / 2 - 10, 20, 20);
-            graph.setColor(defaultColor);
+            graph.drawRect((originx + rx) / 2 - 10, originy - 20, 20, 20);
+            graph.drawRect(originx - 20, (originy + ry) / 2 - 10, 20, 20);
+            graph.drawRect((originx + rx) / 2 - 10, ry, 20, 20);
+            graph.drawRect(rx, (originy + ry) / 2 - 10, 20, 20);
+            graph.setColor(defaultBackground);
         }
     }
 
     @Override
     protected void calculateLowerRight(int w, int l) {
-        lowerRightCoordinate = new Point(metaCoordinate.x + w, metaCoordinate.y + l);
+        lowerRightCoordinate = new Point(originx + w, originy + l);
     }
 
     public void move(Point p) {
-        metaCoordinate = p;
-        calculateLowerRight(width, length + fieldnum * fieldlength);
+        originx = p.x;
+        originy = p.y;
+        calculateLowerRight(width, length);
     }
 
+    // TODO
     public void move(int offsetx, int offsety) {
-        System.out.printf("x = %d, y = %d\n", offsetx, offsety);
-        metaCoordinate.x = ox + offsetx;
-        metaCoordinate.y = oy + offsety;
-        calculateLowerRight(width, length + fieldnum * fieldlength);
+        // originx = ox + offsetx;
+        // originy = oy + offsety;
+        calculateLowerRight(width, length);
     }
 
     public boolean contain(Point p) {
-        int x = p.x;
-        int y = p.y;
-        return x > metaCoordinate.x && x < metaCoordinate.x + width
-                && y > metaCoordinate.y && y < metaCoordinate.y + length + fieldnum * fieldlength;
+        return p.x > originx && p.x < originx + width
+                && p.y > originy && p.y < originy + length;
     }
 
-    public boolean contain(Point origin, Point offset) {
-        int lx = origin.x;
-        int ly = origin.y;
-        int rx = offset.x;
-        int ry = offset.y;
-        return between(metaCoordinate.x, lx, rx) && between(metaCoordinate.y, ly, ry)
-                && between(lowerRightCoordinate.x, lx, rx) && between(lowerRightCoordinate.y, ly, ry);
+    public boolean contain(Point p1, Point p2) {
+        int originx = p1.x;
+        int originy = p1.y;
+        int rx = p2.x;
+        int ry = p2.y;
+        return between(originx, originx, rx) && between(originy, originy, ry)
+                && between(lowerRightCoordinate.x, originx, rx) && between(lowerRightCoordinate.y, originy, ry);
     }
 
-    public void setClassName(String clsname) {
-        className = clsname;
+    public void setClassName(String name) {
+        className = name;
     }
 
     public String getClassName() {
         return className;
     }
 
-    private int ox, oy;
-    private int round = 25;
-    private int fieldnum = 3;
-    private int fieldlength = 60;
+    private int fieldnum;
+    private int fieldlength;
+    private int nameFieldlength;
+    private Color nameFieldColor;
+    private Color memberFieldColor;
     private String className = "Class name";
 }

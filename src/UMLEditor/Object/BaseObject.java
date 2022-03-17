@@ -8,9 +8,12 @@ import java.awt.Graphics;
 
 public abstract class BaseObject {
     public BaseObject() {}
-    public BaseObject(Point p, int depth) {
-        metaCoordinate = p;
-        this.depth = depth;
+    public BaseObject(Point p, int dep) {
+        originx = p.x;
+        originy = p.y;
+        rectRound = 25;
+        defaultBackground = new Color(16777216);
+        depth = dep;
     }
 
     public int getDepth() {
@@ -18,11 +21,11 @@ public abstract class BaseObject {
     }
 
     public void select(boolean state) {
-        beenSelected = state;
+        selected = state;
     }
 
-    public boolean isSelected() {
-        return beenSelected;
+    public boolean IsSelected() {
+        return selected;
     }
 
     public static boolean between(int origin, int left, int right) {
@@ -33,16 +36,18 @@ public abstract class BaseObject {
     public abstract void move(int offsetx, int offsety);
     public abstract void draw(Graphics graph);
     public abstract boolean contain(Point p);
-    public abstract boolean contain(Point origin, Point offset);
+    public abstract boolean contain(Point p1, Point p2);
     protected abstract void calculateLowerRight(int w, int l);
     
     protected int depth;
-    protected int width;
-    protected int length;
-    protected Color defaultColor;
-    protected boolean beenSelected;
-    protected Point metaCoordinate;
     protected Point lowerRightCoordinate;
     protected ArrayList<Integer> connectPorts;
 
+    protected int width;
+    protected int length;
+    protected int originx;
+    protected int originy;
+    protected int rectRound;
+    protected boolean selected;
+    protected Color defaultBackground;
 }

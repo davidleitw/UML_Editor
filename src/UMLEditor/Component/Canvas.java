@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 public class Canvas extends JPanel {
     public Canvas(ButtonToolBar toolBar) {
+        this.toolBar = toolBar;
         MouseAdapter adapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -31,10 +32,6 @@ public class Canvas extends JPanel {
         };
         this.addMouseListener(adapter);
         this.addMouseMotionListener(adapter);
-
-        this.toolBar = toolBar;
-        this.clearBoard = Color.WHITE;
-        this.defaultBoard = new Color(16777216);
     }
 
     private void mousePressedHandler(MouseEvent e) {
@@ -63,8 +60,6 @@ public class Canvas extends JPanel {
         strategy().paint(graph);
     }
 
-    private Color clearBoard;
-    private Color defaultBoard;
     private ButtonToolBar toolBar;
     private Strategy strategy = null;
 
@@ -76,25 +71,29 @@ public class Canvas extends JPanel {
 
     public class Strategy {
         public Strategy() {
-            selectingObjects = new ArrayList<BaseObject>();
             baseObjects = new ArrayList<BaseObject>();
+            selectingObjects = new ArrayList<BaseObject>();
+
+            cleanBackground = Color.WHITE;
+            defaultBackground = new Color(16777216);
+            draggingBackground = new Color(145, 209, 181);
         }
 
         public void paint(Graphics graph) {
-            graph.setColor(clearBoard);
+            graph.setColor(cleanBackground);
             graph.fillRect(0, 0, getSize().width, getSize().height);
-            graph.setColor(defaultBoard);
+            graph.setColor(defaultBackground);
 
-            if (mouseDragging() && !selecting) {
+            if (!selecting && mouseDragging()) {
                 int lx = originPoint.x;
                 int ly = originPoint.y;
                 int offsetx = offsetPoint.x - lx;
                 int offsety = offsetPoint.y - ly;
 
                 graph.drawRoundRect(lx, ly, offsetx, offsety, 20, 20);
-                graph.setColor(new Color(145, 209, 181));
+                graph.setColor(draggingBackground);
                 graph.fillRoundRect(lx, ly, offsetx, offsety, 20, 20);
-                graph.setColor(defaultBoard);
+                graph.setColor(defaultBackground);
             }
 
             for (int i = 0; i < baseObjects.size(); i++) {
@@ -194,8 +193,12 @@ public class Canvas extends JPanel {
 
         private boolean dragging;
         private boolean selecting;
+
         private Point originPoint;
         private Point offsetPoint;
+        private Color cleanBackground;
+        private Color defaultBackground;
+        private Color draggingBackground;
         private ArrayList<BaseObject> baseObjects;
         private ArrayList<BaseObject> selectingObjects;
     }
