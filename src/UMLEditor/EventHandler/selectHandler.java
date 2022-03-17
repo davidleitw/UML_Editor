@@ -9,12 +9,10 @@ public class selectHandler implements eventHandler {
     public void mousePressed(Canvas c, MouseEvent e) {
         origin = e.getPoint();
         c.strategy().selectMousePressed(origin);
-        // c.strategy().clearSelectObject().overlapObject(origin);
     }
 
     public void mouseDragged(Canvas c, MouseEvent e) {
         c.strategy().selectMouseDragged(origin, e.getPoint());
-        // c.strategy().mouseDragging(true).selectObjectByArea(origin, e.getPoint());
     }
     public void mouseReleased(Canvas c, MouseEvent e) {
         c.strategy().selectMouseReleased();
