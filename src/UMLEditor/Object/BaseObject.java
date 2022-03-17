@@ -9,28 +9,23 @@ import java.awt.Graphics;
 public abstract class BaseObject {
     public BaseObject() {}
     public BaseObject(Point p, int depth) {
-        upperLeftCoordinate = p;
+        metaCoordinate = p;
         this.depth = depth;
     }
 
-    public Point getUpperLeftCoordinate() {
-        return upperLeftCoordinate;
+    public void move(Point p) {
+        metaCoordinate = p;
     }
 
     public int getDepth() {
         return depth;
     }
 
-    public abstract void draw(Graphics graph);
-    public abstract boolean contain(Point p);
-    public abstract boolean contain(Point origin, Point offset);
-    protected abstract void calculateLowerRight(int w, int l);
-
     public void select(boolean state) {
         beenSelected = state;
     }
 
-    public boolean getState() {
+    public boolean isSelected() {
         return beenSelected;
     }
 
@@ -38,12 +33,17 @@ public abstract class BaseObject {
         return origin >= left && origin <= right;
     }
 
+    public abstract void draw(Graphics graph);
+    public abstract boolean contain(Point p);
+    public abstract boolean contain(Point origin, Point offset);
+    protected abstract void calculateLowerRight(int w, int l);
+    
     protected int depth;
     protected int width;
     protected int length;
     protected Color defaultColor;
     protected boolean beenSelected;
-    protected Point upperLeftCoordinate;
+    protected Point metaCoordinate;
     protected Point lowerRightCoordinate;
     protected ArrayList<Integer> connectPorts;
 

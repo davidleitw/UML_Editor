@@ -36,7 +36,6 @@ public class Canvas extends JPanel {
         this.toolBar = toolBar;
         this.clearBoard = Color.WHITE;
         this.defaultBoard = new Color(16777216);
-        this.BaseObjects = new ArrayList<BaseObject>();
     }
 
     private void mousePressedHandler(MouseEvent e) {
@@ -68,7 +67,6 @@ public class Canvas extends JPanel {
     private Color clearBoard;
     private Color defaultBoard;
     private ButtonToolBar toolBar;
-    private ArrayList<BaseObject> BaseObjects;
     private Strategy strategy = null;
     
     public Strategy strategy() {
@@ -80,6 +78,7 @@ public class Canvas extends JPanel {
     public class Strategy {
         public Strategy() {
             selectingObjects = new ArrayList<BaseObject>();
+            baseObjects = new ArrayList<BaseObject>();
         }
 
         public void paint(Graphics graph) {
@@ -87,7 +86,7 @@ public class Canvas extends JPanel {
             graph.fillRect(0, 0, getSize().width, getSize().height);
             graph.setColor(defaultBoard);
 
-            if (selectAreaExist()) {
+            if (draggingExist()) {
                 int lx = originPoint.x;
                 int ly = originPoint.y;
                 int offsetx = offsetPoint.x - lx;
@@ -99,48 +98,51 @@ public class Canvas extends JPanel {
                 graph.setColor(defaultBoard);
             }
 
-            for (int i = 0; i < BaseObjects.size(); i++) {
-                BaseObjects.get(i).draw(graph);
+            for (int i = 0; i < baseObjects.size(); i++) {
+                baseObjects.get(i).draw(graph);
             }
         }
 
         public Strategy addSelectableObject(BaseObject obj) {
-            BaseObjects.add(obj);
+            baseObjects.add(obj);
             repaint();
             return this;
         }
         
-        public Strategy setSelectArea(boolean exist) {
-            selectArea = exist;
+        public Strategy mouseDragging(boolean exist) {
+            dragging = exist;
             repaint();
             return this;
         }
 
-        private boolean selectAreaExist() {
-            return selectArea;
+        private boolean draggingExist() {
+            return dragging;
         }
 
         public boolean overlapObject(Point p) {
-            boolean overlap = false;
-            for (BaseObject object: BaseObjects) {
+            BaseObject topSelectObject = null;
+            for (BaseObject object: baseObjects) {
                 if (object.contain(p)) {
-                    overlap = true;
+                    selecting = true;
                     topSelectObject = object;
                 }
             }
-            return overlap;
+            if (topSelectObject != null) {
+                selectingObjects.add(topSelectObject);
+            }
+            setObjectSelectTag();
+            return selecting;
         }
 
-        public void selectTopObject() {
-            topSelectObject.select(true);
+        private void setObjectSelectTag() {
+            for (BaseObject selectobj: selectingObjects) {
+                selectobj.select(true);
+            }
             repaint();
         }
 
         public Strategy clearSelectObject() {
-            if (topSelectObject != null) {
-                topSelectObject.select(false);
-            }
-
+            selecting = false;
             for (BaseObject selectobj: selectingObjects) {
                 selectobj.select(false);
             }
@@ -153,19 +155,20 @@ public class Canvas extends JPanel {
             originPoint = origin;
             offsetPoint = offset;
 
-            for (BaseObject object: BaseObjects) {
+            for (BaseObject object: baseObjects) {
                 if (object.contain(origin, offset)) {
-                    object.select(true);
                     selectingObjects.add(object);
                 }
             }
+            setObjectSelectTag();
             repaint();
         }
 
+        private boolean dragging;
+        private boolean selecting;
         private Point originPoint;
         private Point offsetPoint;
-        private boolean selectArea;
-        private BaseObject topSelectObject;
+        private ArrayList<BaseObject> baseObjects;
         private ArrayList<BaseObject> selectingObjects;
     }
 }

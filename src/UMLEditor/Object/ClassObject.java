@@ -16,8 +16,8 @@ public class ClassObject extends BaseObject {
     @Override
     public void draw(Graphics graph) {
         defaultColor = graph.getColor();
-        int lx = upperLeftCoordinate.x;
-        int ly = upperLeftCoordinate.y;
+        int lx = metaCoordinate.x;
+        int ly = metaCoordinate.y;
         
         graph.setColor(new Color(169, 169, 169));
         graph.fillRoundRect(lx, ly, width, length, round, round);
@@ -34,7 +34,7 @@ public class ClassObject extends BaseObject {
             graph.drawRoundRect(lx, ly+length+i*fieldlength, width-1, fieldlength-1, round, round);
         }
 
-        if (this.getState() == true) {
+        if (this.isSelected() == true) {
             int rx = lx + width;
             int ry = ly + length + fieldnum*fieldlength;
             
@@ -49,14 +49,14 @@ public class ClassObject extends BaseObject {
 
     @Override
     protected void calculateLowerRight(int w, int l) {
-        lowerRightCoordinate = new Point(upperLeftCoordinate.x+w, upperLeftCoordinate.y+l);
+        lowerRightCoordinate = new Point(metaCoordinate.x+w, metaCoordinate.y+l);
     }
 
     public boolean contain(Point p) {
         int x = p.x;
         int y = p.y;
-        return x > upperLeftCoordinate.x && x < upperLeftCoordinate.x + width
-                && y > upperLeftCoordinate.y && y < upperLeftCoordinate.y + length + fieldnum*fieldlength;    
+        return x > metaCoordinate.x && x < metaCoordinate.x + width
+                && y > metaCoordinate.y && y < metaCoordinate.y + length + fieldnum*fieldlength;    
     }
 
     public boolean contain(Point origin, Point offset) {
@@ -65,7 +65,7 @@ public class ClassObject extends BaseObject {
         int rx = offset.x;
         int ry = offset.y;
         
-        return between(upperLeftCoordinate.x, lx, rx) && between(upperLeftCoordinate.y, ly, ry)
+        return between(metaCoordinate.x, lx, rx) && between(metaCoordinate.y, ly, ry)
                 && between(lowerRightCoordinate.x, lx, rx) && between(lowerRightCoordinate.y, ly, ry);
     }
 

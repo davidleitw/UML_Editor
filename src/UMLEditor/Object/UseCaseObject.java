@@ -5,18 +5,19 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public class UseCaseObject extends BaseObject implements SelectableObject {
+public class UseCaseObject extends BaseObject {
     public UseCaseObject(Point p, int depth) {
         super(p, depth);
         width = 160;
         length = 120;
+        calculateLowerRight(width, length);
     }
 
     @Override
     public void draw(Graphics graph) {
         defaultColor = graph.getColor();
-        int lx = upperLeftCoordinate.x;
-        int ly = upperLeftCoordinate.y;
+        int lx = metaCoordinate.x;
+        int ly = metaCoordinate.y;
 
         graph.drawOval(lx, ly, width, length);
         graph.setFont(new Font(useCaseText, Font.PLAIN, 25));
@@ -36,13 +37,17 @@ public class UseCaseObject extends BaseObject implements SelectableObject {
         }
     }
 
-    public void calculateConnectPorts(Point p) {
+    public void calculateLowerRight(int x, int y) {
 
     }
     
-    public boolean include(int x, int y) {
+    public boolean contain(Point p) {
         return false;
-    } 
+    }
+
+    public boolean contain(Point origin, Point offset) {
+        return false;
+    }
 
     private String useCaseText = "use case";
 }
