@@ -1,5 +1,6 @@
 package Object;
 
+import java.awt.Point;
 import java.awt.Graphics;
 
 public class Line {
@@ -18,7 +19,10 @@ public class Line {
     }
 
     public void draw(Graphics graph) {
-        
+        Point srcPoint = source.getPortPointByIndex(srcPortIndex);
+        Point dstPoint = destination.getPortPointByIndex(dstPortIndex);
+
+        graph.drawLine(srcPoint.x, srcPoint.y, dstPoint.x, dstPoint.y);        
     }
 
     private int srcPortIndex;

@@ -10,6 +10,7 @@ public class UseCaseObject extends BasicObject {
         setWidth(160);
         setLength(120);
         calculateDiagonal();
+        calculateConnectPorts();
     }
 
     @Override
@@ -31,9 +32,11 @@ public class UseCaseObject extends BasicObject {
     // https://imgur.com/a/qupUrYT
     @Override
     public boolean contain(Point p) {
-        if (p.x < originx || p.x > acrossx || p.y < originy || p.y > acrossy)
-            return false;
-        return (Math.pow(p.x - originx, 2) / Math.pow(width, 2) + Math.pow(p.y - originy, 2) / Math.pow(length, 2)) < 1;
+        double rx = width / 2;
+        double ry = length / 2;
+        double tx = (p.x - (originx + rx)) / rx;
+        double ty = (p.y - (originy + ry)) / ry;
+        return tx * tx + ty * ty < 1.0;
     }
 
     @Override

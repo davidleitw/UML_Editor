@@ -105,7 +105,7 @@ public class Canvas extends JPanel {
                 line.draw(graph);
             }
         }
-ㄐ
+
         private void setOriginPoint(Point p) {
             originPoint = p;
         }
@@ -117,6 +117,7 @@ public class Canvas extends JPanel {
         private BasicObject pressedOverlapObject(Point p) {
             for (BasicObject object : BasicObjects) {
                 if (object.contain(p)) {
+                    System.out.println("Find overlap object");
                     return object;
                 }
             }
@@ -209,13 +210,17 @@ public class Canvas extends JPanel {
 
         public void createLineMouseReleased(Point p) {
             BasicObject destination = pressedOverlapObject(p);
-            if (createingLine == null || destination == null) {
+            if (creatingLine == null || destination == null) {
+                System.out.println("miss: "+creatingLine+destination);
                 creatingLine = null;
                 return;
             }
             int closeIndex = destination.getClosestPortIndex(p);
+            System.out.println(closeIndex);
             creatingLine.setDestination(destination, closeIndex);
             LineObjects.add(creatingLine);
+            creatingLine = null;
+            repaint();
         }
 
         private boolean dragging;

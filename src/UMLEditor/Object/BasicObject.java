@@ -5,11 +5,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
-// 方便之後加方位?
-enum Position {
-    EAST, SOUTH, WEST, NORTH
-}
-
 public abstract class BasicObject {
     public BasicObject(Point p, int dep) {
         assert (p != null);
@@ -17,7 +12,7 @@ public abstract class BasicObject {
         originx = p.x;
         originy = p.y;
         depth = dep;
-        connectionPorts = new Point[Position.values().length];
+        connectionPorts = new Point[portNum];
     }
 
     public void setWidth(int w) {
@@ -59,10 +54,10 @@ public abstract class BasicObject {
     }
 
     public void calculateConnectPorts() {
-        connectionPorts[Position.WEST.ordinal()] = new Point(acrossx, (originy + acrossy) / 2);
-        connectionPorts[Position.SOUTH.ordinal()] = new Point((originx + acrossx) / 2, acrossy);
-        connectionPorts[Position.EAST.ordinal()] = new Point(originx, (originy + acrossy) / 2);
-        connectionPorts[Position.NORTH.ordinal()] = new Point((originx + acrossx) / 2, originy);
+        connectionPorts[0] = new Point(acrossx, (originy + acrossy) / 2);
+        connectionPorts[1] = new Point((originx + acrossx) / 2, acrossy);
+        connectionPorts[2] = new Point(originx, (originy + acrossy) / 2);
+        connectionPorts[3] = new Point((originx + acrossx) / 2, originy);
     }
 
     public int getClosestPortIndex(Point p) {
@@ -78,6 +73,12 @@ public abstract class BasicObject {
         return closestIndex;
     }
 
+    public Point getPortPointByIndex(int index) {
+        assert(index >= 0);
+        assert(index < portNum);
+        return connectionPorts[index];
+    }
+
     public abstract void draw(Graphics graph);
 
     public abstract boolean contain(Point p);
@@ -90,6 +91,7 @@ public abstract class BasicObject {
     protected boolean selected;
     protected int originx, originy;
     protected int acrossx, acrossy;
+    protected final int portNum = 4;
     protected final int rectRound = 25;
     protected Point[] connectionPorts;
     protected final Color defaultBackground = new Color(16777216);
