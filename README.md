@@ -1,5 +1,6 @@
 # UML_Editor
 
 ## 待優化
-- ClassObject 的 width 跟 length 感覺有很多地方重複存取了
-- move(int x, int y) 的實驗
+- e.getButton() 說不定可以取代 handler 的設計
+- 是否要考慮 line 的 src 跟 dst 連在同一個物件上面
+- create line mode 拖拉到某個物件的時候，考慮把他的 connection port 顯示出來

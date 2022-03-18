@@ -4,16 +4,16 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public class ClassObject extends BaseObject {
+public class ClassObject extends BasicObject {
     public ClassObject(Point p, int depth) {
         super(p, depth);
-        
         fieldnum = 3;
         fieldlength = 60;
         nameFieldlength = 80;
         setWidth(200);
         setLength(nameFieldlength + fieldnum * fieldlength);
         calculateDiagonal();
+        calculateConnectPorts();
     }
 
     @Override

@@ -32,7 +32,7 @@ public class UMLEditor extends JFrame {
         toolBar_ = new ButtonToolBar("tools", JToolBar.VERTICAL);
 
         toolBar_.registerBtn(new BaseButton("Select", "icons/icons8-mouse-80.png", new selectHandler()));
-        toolBar_.registerBtn(new BaseButton("Association", "icons/icons8-arrow-64.png", new createClassHandler()));
+        toolBar_.registerBtn(new BaseButton("Association", "icons/icons8-arrow-64.png", new createAssociationHandler()));
         toolBar_.registerBtn(new BaseButton("Generalization", "icons/icons8-arrow-80.png", new createClassHandler()));
         toolBar_.registerBtn(new BaseButton("Composition", "icons/icons8-archers-arrow-80.png", new createClassHandler()));
         toolBar_.registerBtn(new BaseButton("Class", "icons/icons8-drawer-80.png", new createClassHandler()));
@@ -43,7 +43,6 @@ public class UMLEditor extends JFrame {
 
     private void setCanvasLayout() {
         JPanel panel = new Canvas(this.toolBar_);
-        panel.setBackground(new Color(255, 255, 255));
         this.add(panel, BorderLayout.CENTER);
     }
 

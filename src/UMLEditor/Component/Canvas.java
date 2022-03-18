@@ -71,8 +71,9 @@ public class Canvas extends JPanel {
 
     public class Strategy {
         public Strategy() {
-            baseObjects = new ArrayList<BaseObject>();
-            selectingObjects = new ArrayList<BaseObject>();
+            LineObjects = new ArrayList<Line>();
+            BasicObjects = new ArrayList<BasicObject>();
+            selectingObjects = new ArrayList<BasicObject>();
 
             cleanBackground = Color.WHITE;
             defaultBackground = new Color(16777216);
@@ -96,24 +97,15 @@ public class Canvas extends JPanel {
                 graph.setColor(defaultBackground);
             }
 
-            for (int i = 0; i < baseObjects.size(); i++) {
-                baseObjects.get(i).draw(graph);
+            for (BasicObject obj : BasicObjects) {
+                obj.draw(graph);
+            }
+
+            for (Line line : LineObjects) {
+                line.draw(graph);
             }
         }
-
-        public void addSelectableObject(BaseObject obj) {
-            baseObjects.add(obj);
-            repaint();
-        }
-
-        private void setmouseDragging(boolean exist) {
-            dragging = exist;
-        }
-
-        private boolean mouseDragging() {
-            return dragging;
-        }
-
+ㄐ
         private void setOriginPoint(Point p) {
             originPoint = p;
         }
@@ -122,11 +114,25 @@ public class Canvas extends JPanel {
             offsetPoint = p;
         }
 
+        private BasicObject pressedOverlapObject(Point p) {
+            for (BasicObject object : BasicObjects) {
+                if (object.contain(p)) {
+                    return object;
+                }
+            }
+            return null;
+        }
+
         public void selectMousePressed(Point p) {
             clearSelectObject();
             setOriginPoint(p);
             setOffsetPoint(p);
-            overlapObject(p);
+            BasicObject obj = pressedOverlapObject(p);
+            if (obj != null) {
+                selecting = true;
+                selectingObjects.add(obj);
+                setObjectSelectTag();
+            }
             repaint();
         }
 
@@ -143,7 +149,7 @@ public class Canvas extends JPanel {
             }
 
             clearSelectObject();
-            for (BaseObject obj : baseObjects) {
+            for (BasicObject obj : BasicObjects) {
                 if (obj.contain(originPoint, offsetPoint)) {
                     selectingObjects.add(obj);
                 }
@@ -159,49 +165,69 @@ public class Canvas extends JPanel {
             repaint();
         }
 
-        private void overlapObject(Point p) {
-            BaseObject topSelectObject = null;
-            for (BaseObject object : baseObjects) {
-                if (object.contain(p)) {
-                    selecting = true;
-                    topSelectObject = object;
-                }
-            }
-            if (selecting) {
-                selectingObjects.add(topSelectObject);
-            }
-            setObjectSelectTag();
-        }
-
         private void setObjectSelectTag() {
-            for (BaseObject selectobj : selectingObjects) {
+            for (BasicObject selectobj : selectingObjects) {
                 selectobj.select(true);
             }
         }
 
+        private void setmouseDragging(boolean exist) {
+            dragging = exist;
+        }
+
+        private boolean mouseDragging() {
+            return dragging;
+        }
+
+        public void addSelectableObject(BasicObject obj) {
+            BasicObjects.add(obj);
+            repaint();
+        }
+
         private void clearSelectObject() {
             selecting = false;
-            for (BaseObject selectobj : selectingObjects) {
+            for (BasicObject selectobj : selectingObjects) {
                 selectobj.select(false);
             }
             selectingObjects.clear();
         }
 
         private void moveSelectingObjects(int offsetx, int offsety) {
-            for (BaseObject selectobj : selectingObjects) {
+            for (BasicObject selectobj : selectingObjects) {
                 selectobj.move(offsetx, offsety);
             }
         }
 
+        public void createLineMousePressed(Point p) {
+            BasicObject source = pressedOverlapObject(p);
+            if (source == null) {
+                return;
+            }
+            int closestIndex = source.getClosestPortIndex(p);
+            creatingLine = new Line(source, closestIndex);
+        }
+
+        public void createLineMouseReleased(Point p) {
+            BasicObject destination = pressedOverlapObject(p);
+            if (createingLine == null || destination == null) {
+                creatingLine = null;
+                return;
+            }
+            int closeIndex = destination.getClosestPortIndex(p);
+            creatingLine.setDestination(destination, closeIndex);
+            LineObjects.add(creatingLine);
+        }
+
         private boolean dragging;
         private boolean selecting;
-
         private Point originPoint;
         private Point offsetPoint;
+        private Line creatingLine;
         private Color cleanBackground;
         private Color defaultBackground;
         private Color draggingBackground;
-        private ArrayList<BaseObject> baseObjects;
-        private ArrayList<BaseObject> selectingObjects;
+        private ArrayList<Line> LineObjects;
+        private ArrayList<BasicObject> BasicObjects;
+        private ArrayList<BasicObject> selectingObjects;
     }
 }

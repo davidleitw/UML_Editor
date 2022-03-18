@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public class UseCaseObject extends BaseObject {
+public class UseCaseObject extends BasicObject {
     public UseCaseObject(Point p, int depth) {
         super(p, depth);
         setWidth(160);

@@ -1,19 +1,23 @@
 package Object;
 
-import java.util.ArrayList;
-
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public abstract class BaseObject {
-    public BaseObject(Point p, int dep) {
+// 方便之後加方位?
+enum Position {
+    EAST, SOUTH, WEST, NORTH
+}
+
+public abstract class BasicObject {
+    public BasicObject(Point p, int dep) {
         assert (p != null);
         assert (dep >= 0);
         originx = p.x;
         originy = p.y;
         depth = dep;
+        connectionPorts = new Point[Position.values().length];
     }
 
     public void setWidth(int w) {
@@ -46,11 +50,32 @@ public abstract class BaseObject {
         originx += offsetx;
         originy += offsety;
         calculateDiagonal();
+        calculateConnectPorts();
     }
 
     public void calculateDiagonal() {
         acrossx = originx + width;
         acrossy = originy + length;
+    }
+
+    public void calculateConnectPorts() {
+        connectionPorts[Position.WEST.ordinal()] = new Point(acrossx, (originy + acrossy) / 2);
+        connectionPorts[Position.SOUTH.ordinal()] = new Point((originx + acrossx) / 2, acrossy);
+        connectionPorts[Position.EAST.ordinal()] = new Point(originx, (originy + acrossy) / 2);
+        connectionPorts[Position.NORTH.ordinal()] = new Point((originx + acrossx) / 2, originy);
+    }
+
+    public int getClosestPortIndex(Point p) {
+        int closestIndex = -1;
+        int distance = Integer.MAX_VALUE;
+        for (int i = 0; i < connectionPorts.length; i++) {
+            int d = (int)p.distance(connectionPorts[i]);
+            if (d < distance) {
+                distance = d;
+                closestIndex = i;
+            }
+        }
+        return closestIndex;
     }
 
     public abstract void draw(Graphics graph);
@@ -62,13 +87,11 @@ public abstract class BaseObject {
     protected int depth;
     protected int width;
     protected int length;
-    protected int originx;
-    protected int originy;
-    protected int acrossx;
-    protected int acrossy;
     protected boolean selected;
+    protected int originx, originy;
+    protected int acrossx, acrossy;
     protected final int rectRound = 25;
-    protected ArrayList<Point> connectPorts;
+    protected Point[] connectionPorts;
     protected final Color defaultBackground = new Color(16777216);
     protected final Font defaultFont = new Font("", Font.PLAIN, 25);
 }
