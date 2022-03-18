@@ -125,16 +125,19 @@ public class Canvas extends JPanel {
         public void selectMousePressed(Point p) {
             clearSelectObject();
             setOriginPoint(p);
+            setOffsetPoint(p);
             overlapObject(p);
             repaint();
         }
 
         public void selectMouseDragged(Point offset) {
             setmouseDragging(true);
+            int ox = offset.x - offsetPoint.x;
+            int oy = offset.y - offsetPoint.y;
             setOffsetPoint(offset);
 
             if (selecting) {
-                moveSelectingObjects();
+                moveSelectingObjects(ox, oy);
                 repaint();
                 return;
             }
@@ -184,10 +187,9 @@ public class Canvas extends JPanel {
             selectingObjects.clear();
         }
 
-        private void moveSelectingObjects() {
+        private void moveSelectingObjects(int offsetx, int offsety) {
             for (BaseObject selectobj : selectingObjects) {
-                // selectobj.move(offsetPoint.x - originPoint.x, offsetPoint.y - originPoint.y);
-                selectobj.move(offsetPoint);
+                selectobj.move(offsetx, offsety);
             }
         }
 

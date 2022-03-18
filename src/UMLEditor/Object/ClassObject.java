@@ -1,6 +1,5 @@
 package Object;
 
-import java.awt.Font;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
@@ -14,7 +13,7 @@ public class ClassObject extends BaseObject {
         nameFieldlength = 80;
         setWidth(200);
         setLength(nameFieldlength + fieldnum * fieldlength);
-        calculateLowerRight(width, length);
+        calculateDiagonal();
     }
 
     @Override
@@ -23,7 +22,7 @@ public class ClassObject extends BaseObject {
         graph.fillRoundRect(originx, originy, width, nameFieldlength, rectRound, rectRound);
         graph.setColor(defaultBackground);
         graph.drawRoundRect(originx, originy, width, nameFieldlength, rectRound, rectRound);
-        graph.setFont(new Font(className, Font.PLAIN, 25));
+        graph.setFont(defaultFont);
         graph.drawString(className, originx + 20, originy + 40);
 
         for (int i = 0; i < fieldnum; i++) {
@@ -35,49 +34,26 @@ public class ClassObject extends BaseObject {
                     rectRound);
         }
 
-        if (this.IsSelected() == true) {
-            int rx = originx + width;
-            int ry = originy + nameFieldlength + fieldnum * fieldlength;
-
+        if (this.IsSelected()) {
             graph.setColor(Color.RED);
-            graph.drawRect((originx + rx) / 2 - 10, originy - 20, 20, 20);
-            graph.drawRect(originx - 20, (originy + ry) / 2 - 10, 20, 20);
-            graph.drawRect((originx + rx) / 2 - 10, ry, 20, 20);
-            graph.drawRect(rx, (originy + ry) / 2 - 10, 20, 20);
+            graph.drawRect((originx + acrossx) / 2 - 10, originy - 20, 20, 20);
+            graph.drawRect(originx - 20, (originy + acrossy) / 2 - 10, 20, 20);
+            graph.drawRect((originx + acrossx) / 2 - 10, acrossy, 20, 20);
+            graph.drawRect(acrossx, (originy + acrossy) / 2 - 10, 20, 20);
             graph.setColor(defaultBackground);
         }
     }
-
+    
     @Override
-    protected void calculateLowerRight(int w, int l) {
-        lowerRightCoordinate = new Point(originx + w, originy + l);
-    }
-
-    public void move(Point p) {
-        originx = p.x;
-        originy = p.y;
-        calculateLowerRight(width, length);
-    }
-
-    // TODO
-    public void move(int offsetx, int offsety) {
-        // originx = ox + offsetx;
-        // originy = oy + offsety;
-        calculateLowerRight(width, length);
-    }
-
     public boolean contain(Point p) {
         return p.x > originx && p.x < originx + width
                 && p.y > originy && p.y < originy + length;
     }
 
+    @Override
     public boolean contain(Point p1, Point p2) {
-        int originx = p1.x;
-        int originy = p1.y;
-        int rx = p2.x;
-        int ry = p2.y;
-        return between(originx, originx, rx) && between(originy, originy, ry)
-                && between(lowerRightCoordinate.x, originx, rx) && between(lowerRightCoordinate.y, originy, ry);
+        return between(originx, p1.x, p2.x) && between(originy, p1.y, p2.y)
+                && between(acrossx, p1.x, p2.x) && between(acrossy, p1.y, p2.y);
     }
 
     public void setClassName(String name) {
