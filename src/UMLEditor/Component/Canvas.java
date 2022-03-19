@@ -250,6 +250,19 @@ public class Canvas extends JPanel {
             repaint();
         }
 
+        public boolean canChangeObjectName() {
+            return (SelectingObjects.size()) == 1 && (SelectingObjects.get(0) instanceof ClassObject);
+        }
+
+        public String getChangeObjectName() {
+            return ((ClassObject)SelectingObjects.get(0)).getClassName();
+        }
+
+        public void changeObjectName(String name) {
+            ((ClassObject)SelectingObjects.get(0)).setClassName(name);
+            repaint();
+        }
+
         public void groupObject() {
             if (SelectingObjects.size() < 2) {
                 return;
@@ -262,7 +275,7 @@ public class Canvas extends JPanel {
                     iter.remove();
                 }
             }
-            
+
             GroupObject group = new GroupObject();
             group.makeGroup(SelectingObjects);
             BasicObjects.add(group);
@@ -276,7 +289,7 @@ public class Canvas extends JPanel {
             }
 
             if (SelectingObjects.get(0) instanceof GroupObject) {
-                GroupObject group = (GroupObject)SelectingObjects.get(0);
+                GroupObject group = (GroupObject) SelectingObjects.get(0);
                 clearSelectObject();
                 group.decompose(BasicObjects);
             }
