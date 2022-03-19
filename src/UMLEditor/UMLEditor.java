@@ -32,8 +32,8 @@ public class UMLEditor extends JFrame {
 
         toolBar_.registerBtn(new BaseButton("Select", "icons/icons8-mouse-80.png", new selectHandler()));
         toolBar_.registerBtn(new BaseButton("Association", "icons/icons8-arrow-64.png", new createAssociationHandler()));
-        toolBar_.registerBtn(new BaseButton("Generalization", "icons/icons8-arrow-80.png", new createClassHandler()));
-        toolBar_.registerBtn(new BaseButton("Composition", "icons/icons8-archers-arrow-80.png", new createClassHandler()));
+        toolBar_.registerBtn(new BaseButton("Generalization", "icons/icons8-arrow-80.png", new createGeneralizationHandler()));
+        toolBar_.registerBtn(new BaseButton("Composition", "icons/icons8-archers-arrow-80.png", new createCompositionHandler()));
         toolBar_.registerBtn(new BaseButton("Class", "icons/icons8-drawer-80.png", new createClassHandler()));
         toolBar_.registerBtn(new BaseButton("Use case", "icons/icons8-oval-80.png", new createUsecaseHandler()));
 

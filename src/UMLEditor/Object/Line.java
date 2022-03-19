@@ -3,10 +3,8 @@ package Object;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public class Line {
-    public Line(BasicObject src, int portIndex) {
-        setSource(src, portIndex);
-    }
+public abstract class Line {
+    public Line() {}
 
     public void setSource(BasicObject src, int portIndex) {
         source = src;
@@ -18,15 +16,17 @@ public class Line {
         dstPortIndex = portIndex;
     }
 
-    public void draw(Graphics graph) {
-        Point srcPoint = source.getPortPointByIndex(srcPortIndex);
-        Point dstPoint = destination.getPortPointByIndex(dstPortIndex);
-
-        graph.drawLine(srcPoint.x, srcPoint.y, dstPoint.x, dstPoint.y);        
+    protected void getPoints() {
+        srcPoint = source.getPortPointByIndex(srcPortIndex);
+        dstPoint = destination.getPortPointByIndex(dstPortIndex);
     }
 
-    private int srcPortIndex;
-    private int dstPortIndex;
-    private BasicObject source;
-    private BasicObject destination;
+    public abstract void draw(Graphics graph);
+
+    protected Point srcPoint;
+    protected Point dstPoint;
+    protected int srcPortIndex;
+    protected int dstPortIndex;
+    protected BasicObject source;
+    protected BasicObject destination;
 }

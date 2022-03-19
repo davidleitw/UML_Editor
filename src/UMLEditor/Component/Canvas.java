@@ -97,6 +97,10 @@ public class Canvas extends JPanel {
                 graph.setColor(defaultBackground);
             }
 
+            if (mouseDrawing()) {
+                graph.drawLine(originPoint.x, originPoint.y, offsetPoint.x, offsetPoint.y);
+            }
+
             for (BasicObject obj : BasicObjects) {
                 obj.draw(graph);
             }
@@ -117,7 +121,6 @@ public class Canvas extends JPanel {
         private BasicObject pressedOverlapObject(Point p) {
             for (BasicObject object : BasicObjects) {
                 if (object.contain(p)) {
-                    System.out.println("Find overlap object");
                     return object;
                 }
             }
@@ -180,6 +183,14 @@ public class Canvas extends JPanel {
             return dragging;
         }
 
+        private void setmouseDrawing(boolean exist) {
+            drawing = exist;
+        }
+
+        private boolean mouseDrawing() {
+            return drawing;
+        }
+
         public void addSelectableObject(BasicObject obj) {
             BasicObjects.add(obj);
             repaint();
@@ -199,30 +210,44 @@ public class Canvas extends JPanel {
             }
         }
 
-        public void createLineMousePressed(Point p) {
+        public void createLineMousePressed(Point p, Line line) {
+            setOriginPoint(p);
+            clearSelectObject();
             BasicObject source = pressedOverlapObject(p);
             if (source == null) {
                 return;
             }
-            int closestIndex = source.getClosestPortIndex(p);
-            creatingLine = new Line(source, closestIndex);
-        }
-
-        public void createLineMouseReleased(Point p) {
-            BasicObject destination = pressedOverlapObject(p);
-            if (creatingLine == null || destination == null) {
-                System.out.println("miss: "+creatingLine+destination);
-                creatingLine = null;
-                return;
-            }
-            int closeIndex = destination.getClosestPortIndex(p);
-            System.out.println(closeIndex);
-            creatingLine.setDestination(destination, closeIndex);
-            LineObjects.add(creatingLine);
-            creatingLine = null;
+            System.out.println(line.getClass().getName());
+            line.setSource(source, source.getClosestPortIndex(p));
+            creatingLine = line;
             repaint();
         }
 
+        public void createLineMouseDragged(Point p) {
+            setmouseDrawing(true);
+            if (originPoint != null) {
+                setOffsetPoint(p);
+            }
+            repaint();
+        }
+
+        public void createLineMouseReleased(Point p) {
+            setmouseDrawing(false);
+            BasicObject destination = pressedOverlapObject(p);
+            if (creatingLine == null || destination == null) {
+                creatingLine = null;
+                repaint();
+                return;
+            }
+            creatingLine.setDestination(destination, destination.getClosestPortIndex(p));
+            LineObjects.add(creatingLine);
+            creatingLine = null;
+            setOriginPoint(null);
+            setOffsetPoint(null);
+            repaint();
+        }
+
+        private boolean drawing;
         private boolean dragging;
         private boolean selecting;
         private Point originPoint;

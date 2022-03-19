@@ -32,32 +32,32 @@ public class BaseButton extends JButton implements MouseEventHandler {
     }
 
     public void binding(ButtonToolBar toolbar) {
-        toolBar_ = toolbar;
+        toolBar = toolbar;
         
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                toolBar_.updateCurrentBtn((BaseButton)e.getSource());
+                toolBar.updateCurrentBtn((BaseButton)e.getSource());
             }
         });
     }
 
     private void registerEventHandler(eventHandler handler) {
-        handler_ = handler;
+        this.handler = handler;
     }
 
     public void mousePressed(Canvas c, MouseEvent e) {
-        handler_.mousePressed(c, e);
+        handler.mousePressed(c, e);
     }
 
     public void mouseReleased(Canvas c, MouseEvent e) {
-        handler_.mouseReleased(c, e);
+        handler.mouseReleased(c, e);
     }
 
     public void mouseDragged(Canvas c, MouseEvent e) {
-        handler_.mouseDragged(c, e);
+        handler.mouseDragged(c, e);
     }
 
-    private eventHandler handler_;
-    private ButtonToolBar toolBar_;
+    private eventHandler handler;
+    private ButtonToolBar toolBar;
 }

@@ -1,13 +1,13 @@
 package EventHandler;
 
 import Component.Canvas;
-import Object.AssociationLine;
+import Object.CompositionLine;
 
 import java.awt.event.MouseEvent;
 
-public class createAssociationHandler implements eventHandler {
+public class createCompositionHandler implements eventHandler {
     public void mousePressed(Canvas c, MouseEvent e) {
-        c.strategy().createLineMousePressed(e.getPoint(), new AssociationLine());
+        c.strategy().createLineMousePressed(e.getPoint(), new CompositionLine());
     }
 
     public void mouseDragged(Canvas c, MouseEvent e) {

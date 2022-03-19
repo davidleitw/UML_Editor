@@ -19,40 +19,40 @@ public class ClassObject extends BasicObject {
     @Override
     public void draw(Graphics graph) {
         graph.setColor(nameFieldColor);
-        graph.fillRoundRect(originx, originy, width, nameFieldlength, rectRound, rectRound);
+        graph.fillRoundRect(originX, originY, width, nameFieldlength, rectRound, rectRound);
         graph.setColor(defaultBackground);
-        graph.drawRoundRect(originx, originy, width, nameFieldlength, rectRound, rectRound);
+        graph.drawRoundRect(originX, originY, width, nameFieldlength, rectRound, rectRound);
         graph.setFont(defaultFont);
-        graph.drawString(className, originx + 20, originy + 40);
+        graph.drawString(className, originX + 20, originY + 40);
 
         for (int i = 0; i < fieldnum; i++) {
             graph.setColor(memberFieldColor);
-            graph.fillRoundRect(originx, originy + nameFieldlength + i * fieldlength, width - 1, fieldlength - 1, rectRound,
+            graph.fillRoundRect(originX, originY + nameFieldlength + i * fieldlength, width - 1, fieldlength - 1, rectRound,
                     rectRound);
             graph.setColor(defaultBackground);
-            graph.drawRoundRect(originx, originy + nameFieldlength + i * fieldlength, width - 1, fieldlength - 1, rectRound,
+            graph.drawRoundRect(originX, originY + nameFieldlength + i * fieldlength, width - 1, fieldlength - 1, rectRound,
                     rectRound);
         }
 
         if (this.IsSelected()) {
             graph.setColor(Color.RED);
-            graph.drawRect((originx + acrossx) / 2 - 10, originy - 20, 20, 20);
-            graph.drawRect(originx - 20, (originy + acrossy) / 2 - 10, 20, 20);
-            graph.drawRect((originx + acrossx) / 2 - 10, acrossy, 20, 20);
-            graph.drawRect(acrossx, (originy + acrossy) / 2 - 10, 20, 20);
+            graph.drawRect((originX + acrossx) / 2 - 10, originY - 20, 20, 20);
+            graph.drawRect(originX - 20, (originY + acrossy) / 2 - 10, 20, 20);
+            graph.drawRect((originX + acrossx) / 2 - 10, acrossy, 20, 20);
+            graph.drawRect(acrossx, (originY + acrossy) / 2 - 10, 20, 20);
             graph.setColor(defaultBackground);
         }
     }
     
     @Override
     public boolean contain(Point p) {
-        return p.x > originx && p.x < originx + width
-                && p.y > originy && p.y < originy + length;
+        return p.x > originX && p.x < originX + width
+                && p.y > originY && p.y < originY + length;
     }
 
     @Override
     public boolean contain(Point p1, Point p2) {
-        return between(originx, p1.x, p2.x) && between(originy, p1.y, p2.y)
+        return between(originX, p1.x, p2.x) && between(originY, p1.y, p2.y)
                 && between(acrossx, p1.x, p2.x) && between(acrossy, p1.y, p2.y);
     }
 

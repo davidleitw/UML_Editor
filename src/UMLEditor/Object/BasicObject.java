@@ -9,8 +9,8 @@ public abstract class BasicObject {
     public BasicObject(Point p, int dep) {
         assert (p != null);
         assert (dep >= 0);
-        originx = p.x;
-        originy = p.y;
+        originX = p.x;
+        originY = p.y;
         depth = dep;
         connectionPorts = new Point[portNum];
     }
@@ -42,22 +42,22 @@ public abstract class BasicObject {
     }
 
     public void move(int offsetx, int offsety) {
-        originx += offsetx;
-        originy += offsety;
+        originX += offsetx;
+        originY += offsety;
         calculateDiagonal();
         calculateConnectPorts();
     }
 
     public void calculateDiagonal() {
-        acrossx = originx + width;
-        acrossy = originy + length;
+        acrossx = originX + width;
+        acrossy = originY + length;
     }
 
     public void calculateConnectPorts() {
-        connectionPorts[0] = new Point(acrossx, (originy + acrossy) / 2);
-        connectionPorts[1] = new Point((originx + acrossx) / 2, acrossy);
-        connectionPorts[2] = new Point(originx, (originy + acrossy) / 2);
-        connectionPorts[3] = new Point((originx + acrossx) / 2, originy);
+        connectionPorts[0] = new Point(acrossx, (originY + acrossy) / 2);
+        connectionPorts[1] = new Point((originX + acrossx) / 2, acrossy);
+        connectionPorts[2] = new Point(originX, (originY + acrossy) / 2);
+        connectionPorts[3] = new Point((originX + acrossx) / 2, originY);
     }
 
     public int getClosestPortIndex(Point p) {
@@ -89,7 +89,7 @@ public abstract class BasicObject {
     protected int width;
     protected int length;
     protected boolean selected;
-    protected int originx, originy;
+    protected int originX, originY;
     protected int acrossx, acrossy;
     protected final int portNum = 4;
     protected final int rectRound = 25;
