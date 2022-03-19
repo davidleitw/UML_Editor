@@ -250,16 +250,29 @@ public class Canvas extends JPanel {
             repaint();
         }
 
-        public boolean canChangeObjectName() {
+        public boolean canChangeClassName() {
             return (SelectingObjects.size()) == 1 && (SelectingObjects.get(0) instanceof ClassObject);
         }
 
-        public String getChangeObjectName() {
+        public boolean canChangeCaseName() {
+            return (SelectingObjects.size()) == 1 && (SelectingObjects.get(0) instanceof UseCaseObject);
+        }
+        
+        public String getClassName() {
             return ((ClassObject)SelectingObjects.get(0)).getClassName();
+        }
+
+        public String getCaseName() {
+            return ((UseCaseObject)SelectingObjects.get(0)).getCaseName();
         }
 
         public void changeObjectName(String name) {
             ((ClassObject)SelectingObjects.get(0)).setClassName(name);
+            repaint();
+        }
+
+        public void changeCaseName(String name) {
+            ((UseCaseObject)SelectingObjects.get(0)).setCaseName(name);
             repaint();
         }
 

@@ -14,18 +14,31 @@ public class Menu extends JMenuBar {
         JMenu fileMenu = new JMenu("File");
         JMenu editMenu = new JMenu("Edit");
 
-        JMenuItem changeNameItem = new JMenuItem("Change object name");
-        changeNameItem.addActionListener(new ActionListener() {
+        JMenuItem changeClassItem = new JMenuItem("Change class name");
+        changeClassItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cvs.strategy().canChangeObjectName()) {
-                    String newName = ChangeNameWindow(cvs.strategy().getChangeObjectName());
+                if (cvs.strategy().canChangeClassName()) {
+                    String newName = ChangeClassWindow(cvs.strategy().getClassName());
                     if (newName != "") {
                         cvs.strategy().changeObjectName(newName);
                     }
                 }
             }
         });
+        JMenuItem changeUseCaseItem = new JMenuItem("Change use case name");
+        changeUseCaseItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cvs.strategy().canChangeCaseName()) {
+                    String newName = ChangeCaseWindow(cvs.strategy().getCaseName());
+                    if (newName != "") {
+                        cvs.strategy().changeCaseName(newName);
+                    }
+                }
+            }
+        });
+
         JMenuItem groupItem = new JMenuItem("Group");
         groupItem.addActionListener(new ActionListener() {
             @Override
@@ -40,7 +53,8 @@ public class Menu extends JMenuBar {
                 cvs.strategy().ungroupObject();
             }
         });
-        editMenu.add(changeNameItem);
+        editMenu.add(changeClassItem);
+        editMenu.add(changeUseCaseItem);
         editMenu.add(groupItem);
         editMenu.add(ungroupItem);
 
@@ -48,8 +62,12 @@ public class Menu extends JMenuBar {
         this.add(editMenu);
     }
 
-    private String ChangeNameWindow(String oldname) {
-        return JOptionPane.showInputDialog(null, "New object name:", oldname);
+    private String ChangeClassWindow(String oldname) {
+        return JOptionPane.showInputDialog(null, "New class name:", oldname);
+    }
+
+    private String ChangeCaseWindow(String oldname) {
+        return JOptionPane.showInputDialog(null, "New case name:", oldname);
     }
 
     private Canvas cvs;

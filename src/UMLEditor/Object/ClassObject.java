@@ -56,19 +56,20 @@ public class ClassObject extends BasicObject {
                 && between(acrossX, p1.x, p2.x) && between(acrossY, p1.y, p2.y);
     }
 
-    public void setClassName(String name) {
-        className = name;
-    }
+    
 
     public String getClassName() {
         return className;
+    }
+
+    public void setClassName(String name) {
+        className = name;
     }
 
     private int fieldnum;
     private int fieldlength;
     private int nameFieldlength;
     private String className = "Class name";
-
     private final Color nameFieldColor = new Color(169, 169, 169);
     private final Color memberFieldColor = new Color(177, 192, 213);
 }

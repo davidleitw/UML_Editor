@@ -17,7 +17,7 @@ public class UseCaseObject extends BasicObject {
     public void draw(Graphics graph) {
         graph.drawOval(originX, originY, width, length);
         graph.setFont(defaultFont);
-        graph.drawString(useCaseText, originX + 25, originY + 65);
+        graph.drawString(userCaseName, originX + 25, originY + 65);
 
         if (this.IsSelected()) {
             graph.setColor(Color.RED);
@@ -46,5 +46,13 @@ public class UseCaseObject extends BasicObject {
                 && between(acrossY, p1.y, p2.y);
     }
 
-    private String useCaseText = "use case";
+    public String getCaseName() {
+        return userCaseName;
+    }
+
+    public void setCaseName(String name) {
+        userCaseName = name;
+    }
+
+    private String userCaseName = "use case";
 }
