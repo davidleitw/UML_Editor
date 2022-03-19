@@ -1,7 +1,11 @@
 package Component;
 
 import Object.*;
+
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -73,7 +77,7 @@ public class Canvas extends JPanel {
         public Strategy() {
             LineObjects = new ArrayList<Line>();
             BasicObjects = new ArrayList<BasicObject>();
-            selectingObjects = new ArrayList<BasicObject>();
+            SelectingObjects = new ArrayList<BasicObject>();
 
             cleanBackground = Color.WHITE;
             defaultBackground = new Color(16777216);
@@ -81,6 +85,7 @@ public class Canvas extends JPanel {
         }
 
         public void paint(Graphics graph) {
+            setObjectSelectTag();
             graph.setColor(cleanBackground);
             graph.fillRect(0, 0, getSize().width, getSize().height);
             graph.setColor(defaultBackground);
@@ -134,7 +139,7 @@ public class Canvas extends JPanel {
             BasicObject obj = pressedOverlapObject(p);
             if (obj != null) {
                 selecting = true;
-                selectingObjects.add(obj);
+                SelectingObjects.add(obj);
                 setObjectSelectTag();
             }
             repaint();
@@ -155,7 +160,7 @@ public class Canvas extends JPanel {
             clearSelectObject();
             for (BasicObject obj : BasicObjects) {
                 if (obj.contain(originPoint, offsetPoint)) {
-                    selectingObjects.add(obj);
+                    SelectingObjects.add(obj);
                 }
             }
             setObjectSelectTag();
@@ -170,7 +175,7 @@ public class Canvas extends JPanel {
         }
 
         private void setObjectSelectTag() {
-            for (BasicObject selectobj : selectingObjects) {
+            for (BasicObject selectobj : SelectingObjects) {
                 selectobj.select(true);
             }
         }
@@ -198,14 +203,14 @@ public class Canvas extends JPanel {
 
         private void clearSelectObject() {
             selecting = false;
-            for (BasicObject selectobj : selectingObjects) {
+            for (BasicObject selectobj : SelectingObjects) {
                 selectobj.select(false);
             }
-            selectingObjects.clear();
+            SelectingObjects.clear();
         }
 
         private void moveSelectingObjects(int offsetx, int offsety) {
-            for (BasicObject selectobj : selectingObjects) {
+            for (BasicObject selectobj : SelectingObjects) {
                 selectobj.move(offsetx, offsety);
             }
         }
@@ -217,7 +222,6 @@ public class Canvas extends JPanel {
             if (source == null) {
                 return;
             }
-            System.out.println(line.getClass().getName());
             line.setSource(source, source.getClosestPortIndex(p));
             creatingLine = line;
             repaint();
@@ -247,6 +251,29 @@ public class Canvas extends JPanel {
             repaint();
         }
 
+        public void groupObject() {
+            if (SelectingObjects.size() < 2) {
+                return;
+            }
+
+            Iterator<BasicObject> iter = BasicObjects.iterator();
+            HashSet<BasicObject> selectingObjs = new HashSet<BasicObject>(SelectingObjects);
+
+            System.out.printf("%d, %d\n", BasicObjects.size(), SelectingObjects.size());
+            while (iter.hasNext()) {
+                if (selectingObjs.contains(iter.next())) {
+                    System.out.println("remove");
+                    iter.remove();
+                }
+            }
+            
+            GroupObject group = new GroupObject();
+            group.makeGroup(SelectingObjects);
+            BasicObjects.add(group);
+            SelectingObjects.add(group);
+            repaint();
+        }
+
         private boolean drawing;
         private boolean dragging;
         private boolean selecting;
@@ -258,6 +285,6 @@ public class Canvas extends JPanel {
         private Color draggingBackground;
         private ArrayList<Line> LineObjects;
         private ArrayList<BasicObject> BasicObjects;
-        private ArrayList<BasicObject> selectingObjects;
+        private ArrayList<BasicObject> SelectingObjects;
     }
 }

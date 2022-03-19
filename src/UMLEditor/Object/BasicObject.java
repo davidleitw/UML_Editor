@@ -6,12 +6,15 @@ import java.awt.Point;
 import java.awt.Graphics;
 
 public abstract class BasicObject {
-    public BasicObject(Point p, int dep) {
+    public BasicObject() {
+        connectionPorts = new Point[portNum];
+    }
+    public BasicObject(Point p, int d) {
         assert (p != null);
-        assert (dep >= 0);
+        assert (d >= 0);
         originX = p.x;
         originY = p.y;
-        depth = dep;
+        depth = d;
         connectionPorts = new Point[portNum];
     }
 
@@ -49,15 +52,15 @@ public abstract class BasicObject {
     }
 
     public void calculateDiagonal() {
-        acrossx = originX + width;
-        acrossy = originY + length;
+        acrossX = originX + width;
+        acrossY = originY + length;
     }
 
     public void calculateConnectPorts() {
-        connectionPorts[0] = new Point(acrossx, (originY + acrossy) / 2);
-        connectionPorts[1] = new Point((originX + acrossx) / 2, acrossy);
-        connectionPorts[2] = new Point(originX, (originY + acrossy) / 2);
-        connectionPorts[3] = new Point((originX + acrossx) / 2, originY);
+        connectionPorts[0] = new Point(acrossX, (originY + acrossY) / 2);
+        connectionPorts[1] = new Point((originX + acrossX) / 2, acrossY);
+        connectionPorts[2] = new Point(originX, (originY + acrossY) / 2);
+        connectionPorts[3] = new Point((originX + acrossX) / 2, originY);
     }
 
     public int getClosestPortIndex(Point p) {
@@ -90,7 +93,7 @@ public abstract class BasicObject {
     protected int length;
     protected boolean selected;
     protected int originX, originY;
-    protected int acrossx, acrossy;
+    protected int acrossX, acrossY;
     protected final int portNum = 4;
     protected final int rectRound = 25;
     protected Point[] connectionPorts;

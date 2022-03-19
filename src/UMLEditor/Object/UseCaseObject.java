@@ -21,10 +21,10 @@ public class UseCaseObject extends BasicObject {
 
         if (this.IsSelected()) {
             graph.setColor(Color.RED);
-            graph.drawRect((originX + acrossx) / 2 - 10, originY - 20, 20, 20);
-            graph.drawRect((originX + acrossx) / 2 - 10, acrossy, 20, 20);
-            graph.drawRect(originX - 20, (originY + acrossy) / 2 - 10, 20, 20);
-            graph.drawRect(acrossx, (originY + acrossy) / 2 - 10, 20, 20);
+            graph.drawRect((originX + acrossX) / 2 - 10, originY - 20, 20, 20);
+            graph.drawRect((originX + acrossX) / 2 - 10, acrossY, 20, 20);
+            graph.drawRect(originX - 20, (originY + acrossY) / 2 - 10, 20, 20);
+            graph.drawRect(acrossX, (originY + acrossY) / 2 - 10, 20, 20);
             graph.setColor(defaultBackground);
         }
     }
@@ -42,8 +42,8 @@ public class UseCaseObject extends BasicObject {
 
     @Override
     public boolean contain(Point p1, Point p2) {
-        return between(originX, p1.x, p2.x) && between(originY, p1.y, p2.y) && between(acrossx, p1.x, p2.x)
-                && between(acrossy, p1.y, p2.y);
+        return between(originX, p1.x, p2.x) && between(originY, p1.y, p2.y) && between(acrossX, p1.x, p2.x)
+                && between(acrossY, p1.y, p2.y);
     }
 
     private String useCaseText = "use case";

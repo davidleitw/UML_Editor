@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 
 import Button.*;
 import EventHandler.*;
-import Component.ButtonToolBar;
+import Component.Menu;
 import Component.Canvas;
+import Component.ButtonToolBar;
+
 
 public class UMLEditor extends JFrame {
     public static void main(String[] args) {
@@ -18,34 +20,36 @@ public class UMLEditor extends JFrame {
         this.setLocationRelativeTo(null);
 
         this.setLayout(new BorderLayout());
-        this.setMenuLayout();
         this.setToolBarLayout();
         this.setCanvasLayout();
+        this.setMenuLayout();
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
     }
 
-    private ButtonToolBar toolBar_;
+    private void setMenuLayout() {
+        menu = new Menu(cvs);
+        this.add(menu, BorderLayout.NORTH);
+    }
     private void setToolBarLayout() {
-        toolBar_ = new ButtonToolBar("tools", JToolBar.VERTICAL);
+        toolBar = new ButtonToolBar("tools", JToolBar.VERTICAL);
 
-        toolBar_.registerBtn(new BaseButton("Select", "icons/icons8-mouse-80.png", new selectHandler()));
-        toolBar_.registerBtn(new BaseButton("Association", "icons/icons8-arrow-64.png", new createAssociationHandler()));
-        toolBar_.registerBtn(new BaseButton("Generalization", "icons/icons8-arrow-80.png", new createGeneralizationHandler()));
-        toolBar_.registerBtn(new BaseButton("Composition", "icons/icons8-archers-arrow-80.png", new createCompositionHandler()));
-        toolBar_.registerBtn(new BaseButton("Class", "icons/icons8-drawer-80.png", new createClassHandler()));
-        toolBar_.registerBtn(new BaseButton("Use case", "icons/icons8-oval-80.png", new createUsecaseHandler()));
+        toolBar.registerBtn(new BaseButton("Select", "icons/icons8-mouse-80.png", new selectHandler()));
+        toolBar.registerBtn(new BaseButton("Association", "icons/icons8-arrow-64.png", new createAssociationHandler()));
+        toolBar.registerBtn(new BaseButton("Generalization", "icons/icons8-arrow-80.png", new createGeneralizationHandler()));
+        toolBar.registerBtn(new BaseButton("Composition", "icons/icons8-archers-arrow-80.png", new createCompositionHandler()));
+        toolBar.registerBtn(new BaseButton("Class", "icons/icons8-drawer-80.png", new createClassHandler()));
+        toolBar.registerBtn(new BaseButton("Use case", "icons/icons8-oval-80.png", new createUsecaseHandler()));
 
-        this.add(toolBar_, BorderLayout.WEST);
+        this.add(toolBar, BorderLayout.WEST);
     }
 
     private void setCanvasLayout() {
-        JPanel panel = new Canvas(this.toolBar_);
-        this.add(panel, BorderLayout.CENTER);
+        cvs = new Canvas(this.toolBar);
+        this.add(cvs, BorderLayout.CENTER);
     }
-
-    private void setMenuLayout() {
-
-    }
+    private Menu menu;
+    private Canvas cvs;
+    private ButtonToolBar toolBar;
 }

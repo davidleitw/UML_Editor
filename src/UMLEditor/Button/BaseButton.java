@@ -15,6 +15,9 @@ import Component.ButtonToolBar;
 
 interface MouseEventHandler {
     void mousePressed(Canvas c, MouseEvent e);
+
+    void mouseDragged(Canvas c, MouseEvent e);
+
     void mouseReleased(Canvas c, MouseEvent e);
 }
 
@@ -33,11 +36,11 @@ public class BaseButton extends JButton implements MouseEventHandler {
 
     public void binding(ButtonToolBar toolbar) {
         toolBar = toolbar;
-        
+
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                toolBar.updateCurrentBtn((BaseButton)e.getSource());
+                toolBar.updateCurrentBtn((BaseButton) e.getSource());
             }
         });
     }
