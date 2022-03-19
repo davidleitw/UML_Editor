@@ -5,7 +5,6 @@ import Object.*;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -258,11 +257,8 @@ public class Canvas extends JPanel {
 
             Iterator<BasicObject> iter = BasicObjects.iterator();
             HashSet<BasicObject> selectingObjs = new HashSet<BasicObject>(SelectingObjects);
-
-            System.out.printf("%d, %d\n", BasicObjects.size(), SelectingObjects.size());
             while (iter.hasNext()) {
                 if (selectingObjs.contains(iter.next())) {
-                    System.out.println("remove");
                     iter.remove();
                 }
             }
@@ -271,6 +267,19 @@ public class Canvas extends JPanel {
             group.makeGroup(SelectingObjects);
             BasicObjects.add(group);
             SelectingObjects.add(group);
+            repaint();
+        }
+
+        public void ungroupObject() {
+            if (SelectingObjects.size() != 1) {
+                return;
+            }
+
+            if (SelectingObjects.get(0) instanceof GroupObject) {
+                GroupObject group = (GroupObject)SelectingObjects.get(0);
+                clearSelectObject();
+                group.decompose(BasicObjects);
+            }
             repaint();
         }
 

@@ -37,6 +37,14 @@ public class GroupObject extends BasicObject {
         calculateConnectPorts();
     }
 
+    public void decompose(ArrayList<BasicObject> basicObjects) {
+        for (BasicObject obj : includeObjects) {
+            basicObjects.add(obj);
+        }
+
+        basicObjects.remove(this);
+    }
+    
     @Override
     public void move(int offsetx, int offsety) {
         originX += offsetx;
@@ -50,9 +58,9 @@ public class GroupObject extends BasicObject {
 
     @Override
     public void draw(Graphics graph) {
-        graph.drawRect(originX, originY, width, length);
 
         if (this.IsSelected()) {
+            graph.drawRect(originX, originY, width, length);
             graph.setColor(Color.RED);
             graph.drawRect((originX + acrossX) / 2 - 10, originY - 20, 20, 20);
             graph.drawRect(originX - 20, (originY + acrossY) / 2 - 10, 20, 20);

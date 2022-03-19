@@ -24,6 +24,12 @@ public class Menu extends JMenuBar {
             }
         });
         JMenuItem ungroupItem = new JMenuItem("Ungroup");
+        ungroupItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cvs.strategy().ungroupObject();
+            }
+        });
         editMenu.add(changeNameItem);
         editMenu.add(groupItem);
         editMenu.add(ungroupItem);
