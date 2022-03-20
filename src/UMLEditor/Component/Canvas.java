@@ -139,7 +139,6 @@ public class Canvas extends JPanel {
             if (obj != null) {
                 selecting = true;
                 SelectingObjects.add(obj);
-                setObjectSelectTag();
             }
             repaint();
         }
@@ -162,7 +161,6 @@ public class Canvas extends JPanel {
                     SelectingObjects.add(obj);
                 }
             }
-            setObjectSelectTag();
             repaint();
         }
 
