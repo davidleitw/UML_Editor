@@ -145,9 +145,9 @@ public class Canvas extends JPanel {
         }
 
         public void selectMouseDragged(Point offset) {
-            setmouseDragging(true);
             int ox = offset.x - offsetPoint.x;
             int oy = offset.y - offsetPoint.y;
+            setmouseDragging(true);
             setOffsetPoint(offset);
 
             if (selecting) {

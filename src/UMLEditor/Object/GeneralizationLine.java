@@ -8,9 +8,8 @@ public class GeneralizationLine extends Line{
     @Override
     public void draw(Graphics graph) {
         getPoints();
-        // graph.drawLine(srcPoint.x, srcPoint.y, dstPoint.x, dstPoint.y); 
 
-        double h = 20; //arrow height
+        double h = 20;
 		int dx = dstPoint.x - srcPoint.x, dy = dstPoint.y - srcPoint.y;
 		double D = Math.sqrt(dx*dx + dy*dy);
 		double px = dstPoint.x-h*dx/D;
