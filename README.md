@@ -8,3 +8,4 @@
 - create line mode 拖拉到某個物件的時候，考慮把他的 connection port 顯示出來
 - contain改成(x, y) 形式 
 - drawing, dragging 可合併
+- GroupObject 內部的物件應該要可以被外部的物件連線

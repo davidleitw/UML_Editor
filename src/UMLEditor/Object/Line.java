@@ -16,6 +16,14 @@ public abstract class Line {
         dstPortIndex = portIndex;
     }
 
+    public BasicObject getSource() {
+        return source;
+    }
+
+    public BasicObject getDestination() {
+        return destination;
+    }
+
     protected void getPoints() {
         srcPoint = source.getPortPointByIndex(srcPortIndex);
         dstPoint = destination.getPortPointByIndex(dstPortIndex);

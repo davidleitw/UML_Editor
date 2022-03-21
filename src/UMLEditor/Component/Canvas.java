@@ -235,7 +235,7 @@ public class Canvas extends JPanel {
         public void createLineMouseReleased(Point p) {
             setmouseDrawing(false);
             BasicObject destination = pressedOverlapObject(p);
-            if (creatingLine == null || destination == null) {
+            if (creatingLine == null || destination == null || creatingLine.getSource() == destination) {
                 creatingLine = null;
                 repaint();
                 return;
