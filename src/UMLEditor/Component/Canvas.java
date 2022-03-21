@@ -303,7 +303,17 @@ public class Canvas extends JPanel {
                 GroupObject group = (GroupObject) SelectingObjects.get(0);
                 clearSelectObject();
                 group.decompose(BasicObjects);
+                
+                Iterator<Line> iter = LineObjects.iterator();
+                while (iter.hasNext()) {
+                    Line l = iter.next();
+                    if (l.getSource() == group || l.getDestination() == group) {
+                        iter.remove();
+                    }
+                }
             }
+
+            
             repaint();
         }
 
