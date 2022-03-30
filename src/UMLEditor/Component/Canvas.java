@@ -124,7 +124,7 @@ public class Canvas extends JPanel {
 
         private BasicObject pressedOverlapObject(Point p) {
             for (BasicObject object : BasicObjects) {
-                if (object.contain(p)) {
+                if (object.contain(p.x, p.y)) {
                     return object;
                 }
             }
@@ -157,7 +157,8 @@ public class Canvas extends JPanel {
 
             clearSelectObject();
             for (BasicObject obj : BasicObjects) {
-                if (obj.contain(originPoint, offsetPoint)) {
+                if (obj.contained(originPoint.x, originPoint.y, offsetPoint.x - originPoint.x,
+                        offsetPoint.y - originPoint.y)) {
                     SelectingObjects.add(obj);
                 }
             }
@@ -255,22 +256,22 @@ public class Canvas extends JPanel {
         public boolean canChangeCaseName() {
             return (SelectingObjects.size()) == 1 && (SelectingObjects.get(0) instanceof UseCaseObject);
         }
-        
+
         public String getClassName() {
-            return ((ClassObject)SelectingObjects.get(0)).getClassName();
+            return ((ClassObject) SelectingObjects.get(0)).getClassName();
         }
 
         public String getCaseName() {
-            return ((UseCaseObject)SelectingObjects.get(0)).getCaseName();
+            return ((UseCaseObject) SelectingObjects.get(0)).getCaseName();
         }
 
         public void changeObjectName(String name) {
-            ((ClassObject)SelectingObjects.get(0)).setClassName(name);
+            ((ClassObject) SelectingObjects.get(0)).setClassName(name);
             repaint();
         }
 
         public void changeCaseName(String name) {
-            ((UseCaseObject)SelectingObjects.get(0)).setCaseName(name);
+            ((UseCaseObject) SelectingObjects.get(0)).setCaseName(name);
             repaint();
         }
 
@@ -303,7 +304,7 @@ public class Canvas extends JPanel {
                 GroupObject group = (GroupObject) SelectingObjects.get(0);
                 clearSelectObject();
                 group.decompose(BasicObjects);
-                
+
                 Iterator<Line> iter = LineObjects.iterator();
                 while (iter.hasNext()) {
                     Line l = iter.next();
@@ -312,8 +313,6 @@ public class Canvas extends JPanel {
                     }
                 }
             }
-
-            
             repaint();
         }
 

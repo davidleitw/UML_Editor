@@ -9,6 +9,7 @@ public abstract class BasicObject {
     public BasicObject() {
         connectionPorts = new Point[portNum];
     }
+
     public BasicObject(Point p, int d) {
         assert (p != null);
         assert (d >= 0);
@@ -67,7 +68,7 @@ public abstract class BasicObject {
         int closestIndex = -1;
         int distance = Integer.MAX_VALUE;
         for (int i = 0; i < connectionPorts.length; i++) {
-            int d = (int)p.distance(connectionPorts[i]);
+            int d = (int) p.distance(connectionPorts[i]);
             if (d < distance) {
                 distance = d;
                 closestIndex = i;
@@ -77,16 +78,19 @@ public abstract class BasicObject {
     }
 
     public Point getPortPointByIndex(int index) {
-        assert(index >= 0);
-        assert(index < portNum);
+        assert (index >= 0);
+        assert (index < portNum);
         return connectionPorts[index];
     }
 
     public abstract void draw(Graphics graph);
 
-    public abstract boolean contain(Point p);
+    public abstract boolean contain(int x, int y);
 
-    public abstract boolean contain(Point p1, Point p2);
+    public boolean contained(int x, int y, int w, int l) {
+        return w > 0 && l > 0 && width > 0 && length > 0 && x < originX && y < originY && originX + width < x + w
+                && originY + length < y + l;
+    }
 
     protected int depth;
     protected int width;

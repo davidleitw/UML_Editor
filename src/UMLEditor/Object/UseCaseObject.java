@@ -32,18 +32,12 @@ public class UseCaseObject extends BasicObject {
     // https://imgur.com/a/qupUrYT
     // https://developer.classpath.org/doc/java/awt/geom/Ellipse2D-source.html
     @Override
-    public boolean contain(Point p) {
+    public boolean contain(int x, int y) {
         double rx = width / 2;
         double ry = length / 2;
-        double tx = (p.x - (originX + rx)) / rx;
-        double ty = (p.y - (originY + ry)) / ry;
+        double tx = (x - (originX + rx)) / rx;
+        double ty = (y - (originY + ry)) / ry;
         return tx * tx + ty * ty < 1.0;
-    }
-
-    @Override
-    public boolean contain(Point p1, Point p2) {
-        return between(originX, p1.x, p2.x) && between(originY, p1.y, p2.y) && between(acrossX, p1.x, p2.x)
-                && between(acrossY, p1.y, p2.y);
     }
 
     public String getCaseName() {
