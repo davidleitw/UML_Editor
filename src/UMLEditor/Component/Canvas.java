@@ -217,7 +217,7 @@ public class Canvas extends JPanel {
             setOriginPoint(p);
             clearSelectObject();
             BasicObject source = pressedOverlapObject(p);
-            if (source == null) {
+            if (source == null || source instanceof GroupObject) {
                 return;
             }
             line.setSource(source, source.getClosestPortIndex(p));
@@ -236,7 +236,8 @@ public class Canvas extends JPanel {
         public void createLineMouseReleased(Point p) {
             setmouseDrawing(false);
             BasicObject destination = pressedOverlapObject(p);
-            if (creatingLine == null || destination == null || creatingLine.getSource() == destination) {
+            if (creatingLine == null || destination == null || creatingLine.getSource() == destination
+                    || destination instanceof GroupObject) {
                 creatingLine = null;
                 repaint();
                 return;

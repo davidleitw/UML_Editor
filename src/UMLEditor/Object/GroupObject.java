@@ -1,7 +1,6 @@
 package Object;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Graphics;
 
 import java.util.Iterator;
@@ -58,15 +57,8 @@ public class GroupObject extends BasicObject {
 
     @Override
     public void draw(Graphics graph) {
-
         if (this.IsSelected()) {
             graph.drawRect(originX, originY, width, length);
-            graph.setColor(Color.RED);
-            graph.drawRect((originX + acrossX) / 2 - 10, originY - 20, 20, 20);
-            graph.drawRect(originX - 20, (originY + acrossY) / 2 - 10, 20, 20);
-            graph.drawRect((originX + acrossX) / 2 - 10, acrossY, 20, 20);
-            graph.drawRect(acrossX, (originY + acrossY) / 2 - 10, 20, 20);
-            graph.setColor(defaultBackground); 
         }
         for (BasicObject obj : includeObjects) {
             obj.draw(graph);
@@ -74,15 +66,9 @@ public class GroupObject extends BasicObject {
     }
 
     @Override
-    public boolean contain(Point p) {
-        return p.x > originX && p.x < originX + width
-                && p.y > originY && p.y < originY + length;
-    }
-
-    @Override
-    public boolean contain(Point p1, Point p2) {
-        return between(originX, p1.x, p2.x) && between(originY, p1.y, p2.y)
-                && between(acrossX, p1.x, p2.x) && between(acrossY, p1.y, p2.y);
+    public boolean contain(int x, int y) {
+        return x > originX && x < originX + width
+            && y > originY && y < originY + length;
     }
 
     private ArrayList<BasicObject> includeObjects;
