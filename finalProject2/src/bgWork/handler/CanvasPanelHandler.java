@@ -21,6 +21,7 @@ import mod.instance.CompositionLine;
 import mod.instance.GeneralizationLine;
 import mod.instance.GroupContainer;
 import mod.instance.UseCase;
+import mod.instance.DottedLine;
 
 public class CanvasPanelHandler extends PanelHandler
 {
@@ -63,9 +64,10 @@ public class CanvasPanelHandler extends PanelHandler
 			case 1:
 			case 2:
 			case 3:
+			case 4:		
 				break;
-			case 4:
-			case 5:
+			case 5:			
+			case 6:
 				addObject(core.getCurrentFunc(), e.getPoint());
 				break;
 			default:
@@ -84,10 +86,11 @@ public class CanvasPanelHandler extends PanelHandler
 			case 1:
 			case 2:
 			case 3:
+			case 4:
 				addLine(core.getCurrentFunc(), dp);
 				break;
-			case 4:
 			case 5:
+			case 6:
 				break;
 			default:
 				break;
@@ -392,6 +395,8 @@ public class CanvasPanelHandler extends PanelHandler
 					case 2:
 						((GeneralizationLine) funcObj).setConnect(dPack);
 						break;
+					case 3:
+						((DottedLine) funcObj).setConnect(dPack);
 					default:
 						break;
 				}

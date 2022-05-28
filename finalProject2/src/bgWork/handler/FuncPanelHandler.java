@@ -18,6 +18,7 @@ import mod.instance.CompositionLine;
 import mod.instance.GeneralizationLine;
 import mod.instance.SelectComp;
 import mod.instance.UseCase;
+import mod.instance.DottedLine;
 
 public class FuncPanelHandler extends PanelHandler
 {
@@ -114,19 +115,19 @@ public class FuncPanelHandler extends PanelHandler
 		switch (index)
 		{
 			case 0:
-				return new ImageIcon("icon/select.jpg");
+				return new ImageIcon("finalProject2/icon/select.jpg");
 			case 1:
-				return new ImageIcon("icon/association_line.jpg");
+				return new ImageIcon("finalProject2/icon/association_line.jpg");
 			case 2:
-				return new ImageIcon("icon/generalization_line.jpg");
+				return new ImageIcon("finalProject2/icon/generalization_line.jpg");
 			case 3:
-				return new ImageIcon("icon/composition_line.jpg");
+				return new ImageIcon("finalProject2/icon/composition_line.jpg");
 			case 4:
-				return new ImageIcon("icon/arrow-right.png");
+				return new ImageIcon("finalProject2/icon/arrow-right.png");
 			case 5:
-				return new ImageIcon("icon/use_case.jpg");
+				return new ImageIcon("finalProject2/icon/use_case.jpg");
 			case 6:
-				return new ImageIcon("icon/class.jpg");
+				return new ImageIcon("finalProject2/icon/class.jpg");
 			default:
 				return null;
 		}
@@ -145,7 +146,7 @@ public class FuncPanelHandler extends PanelHandler
 			case 3:
 				return new CompositionLine(core.getCanvasPanelHandler());
 			case 4:
-				return new BasicClass(core.getCanvasPanelHandler());
+				return new DottedLine(core.getCanvasPanelHandler());
 			case 5:
 				return new UseCase(core.getCanvasPanelHandler());
 			case 6:

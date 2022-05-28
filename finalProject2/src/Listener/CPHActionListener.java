@@ -2,7 +2,6 @@ package Listener;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import Pack.DragPack;
@@ -10,7 +9,7 @@ import bgWork.handler.CanvasPanelHandler;
 import bgWork.handler.PanelHandler;
 
 public class CPHActionListener extends HandlerActionListener
-		implements MouseMotionListener, MouseListener
+		implements MouseMotionListener
 {
 	Point	from		= new Point(0, 0);
 	Object	fromObj;
@@ -24,6 +23,7 @@ public class CPHActionListener extends HandlerActionListener
 		clear();
 	}
 
+	// 按下左鍵
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
@@ -31,6 +31,7 @@ public class CPHActionListener extends HandlerActionListener
 		fromObj = e.getComponent();
 	}
 
+	// 放開左鍵
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
@@ -50,6 +51,7 @@ public class CPHActionListener extends HandlerActionListener
 		clear();
 	}
 
+	// 點擊左鍵
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{

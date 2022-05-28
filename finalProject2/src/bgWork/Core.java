@@ -8,6 +8,7 @@ import bgWork.handler.MenuBarHandler;
 import mod.instance.AssociationLine;
 import mod.instance.BasicClass;
 import mod.instance.CompositionLine;
+import mod.instance.DottedLine;
 import mod.instance.GeneralizationLine;
 import mod.instance.GroupContainer;
 import mod.instance.UseCase;
@@ -98,6 +99,10 @@ public class Core extends InitProcess
 		return obj instanceof GeneralizationLine;
 	}
 
+	public boolean isDottedLine(Object obj) {
+		return obj instanceof DottedLine;
+	}
+
 	public int isLine(Object obj)
 	{
 		if (isAssociationLine(obj))
@@ -111,6 +116,8 @@ public class Core extends InitProcess
 		else if (isGeneralizationLine(obj))
 		{
 			return 2;
+		} else if (isDottedLine(obj)) {
+			return 3;
 		}
 		return -1;
 	}
