@@ -14,7 +14,13 @@ import java.awt.event.MouseAdapter;
 
 import javax.swing.JPanel;
 
+import Button.BaseButton;
+
 public class Canvas extends JPanel {
+    private Strategy strategy = null;
+    private BaseButton currentBtn = null;
+    private ButtonToolBar toolBar = null;
+    
     public Canvas(ButtonToolBar toolBar) {
         this.toolBar = toolBar;
         MouseAdapter adapter = new MouseAdapter() {
@@ -38,34 +44,31 @@ public class Canvas extends JPanel {
     }
 
     private void mousePressedHandler(MouseEvent e) {
-        if (toolBar.getCurrentBtn() == null) {
-            return;
+        currentBtn = toolBar.getCurrentBtn();
+        if (currentBtn != null) {
+            currentBtn.mousePressedEvent(this, e);
         }
-        toolBar.getCurrentBtn().mousePressed(this, e);
     }
 
     private void mouseReleasedHandler(MouseEvent e) {
-        if (toolBar.getCurrentBtn() == null) {
-            return;
+        currentBtn = toolBar.getCurrentBtn();
+        if (currentBtn != null) {
+            currentBtn.mouseReleasedEvent(this, e);
         }
-        toolBar.getCurrentBtn().mouseReleased(this, e);
     }
 
     private void mouseDraggedHandler(MouseEvent e) {
-        if (toolBar.getCurrentBtn() == null) {
-            return;
+        currentBtn = toolBar.getCurrentBtn();
+        if (currentBtn != null) {
+            toolBar.getCurrentBtn().mouseDraggedEvent(this, e);
         }
-        toolBar.getCurrentBtn().mouseDragged(this, e);
     }
 
     @Override
     public void paint(Graphics graph) {
         strategy().paint(graph);
     }
-
-    private ButtonToolBar toolBar;
-    private Strategy strategy = null;
-
+    
     public Strategy strategy() {
         if (strategy == null)
             strategy = new Strategy();

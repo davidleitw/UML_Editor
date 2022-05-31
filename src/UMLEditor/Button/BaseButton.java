@@ -13,15 +13,7 @@ import EventHandler.*;
 import Component.Canvas;
 import Component.ButtonToolBar;
 
-interface MouseEventHandler {
-    void mousePressed(Canvas c, MouseEvent e);
-
-    void mouseDragged(Canvas c, MouseEvent e);
-
-    void mouseReleased(Canvas c, MouseEvent e);
-}
-
-public class BaseButton extends JButton implements MouseEventHandler {
+public class BaseButton extends JButton {
     public BaseButton(String buttonMode, String buttonIconPath, eventHandler handler) {
         super(buttonMode, new ImageIcon(buttonIconPath));
         setFocusable(false);
@@ -34,13 +26,13 @@ public class BaseButton extends JButton implements MouseEventHandler {
         registerEventHandler(handler);
     }
 
-    public void binding(ButtonToolBar toolbar) {
-        toolBar = toolbar;
+    public void linkToolBar(ButtonToolBar toolbar) {
+        this.toolBar = toolbar;
 
         this.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                toolBar.updateCurrentBtn((BaseButton) e.getSource());
+                toolBar.updateCurrentBtn((BaseButton)e.getSource());
             }
         });
     }
@@ -49,15 +41,15 @@ public class BaseButton extends JButton implements MouseEventHandler {
         this.handler = handler;
     }
 
-    public void mousePressed(Canvas c, MouseEvent e) {
+    public void mousePressedEvent(Canvas c, MouseEvent e) {
         handler.mousePressed(c, e);
     }
 
-    public void mouseReleased(Canvas c, MouseEvent e) {
+    public void mouseReleasedEvent(Canvas c, MouseEvent e) {
         handler.mouseReleased(c, e);
     }
 
-    public void mouseDragged(Canvas c, MouseEvent e) {
+    public void mouseDraggedEvent(Canvas c, MouseEvent e) {
         handler.mouseDragged(c, e);
     }
 
