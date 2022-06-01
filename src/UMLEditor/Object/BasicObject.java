@@ -52,11 +52,13 @@ public abstract class BasicObject {
         calculateConnectPorts();
     }
 
+    // 更新對角線座標
     public void calculateDiagonal() {
         acrossX = originX + width;
         acrossY = originY + length;
     }
 
+    // 更新四個 connection ports 座標
     public void calculateConnectPorts() {
         connectionPorts[0] = new Point(acrossX, (originY + acrossY) / 2);
         connectionPorts[1] = new Point((originX + acrossX) / 2, acrossY);
@@ -87,6 +89,7 @@ public abstract class BasicObject {
 
     public abstract boolean contain(int x, int y);
 
+    // 判斷物件是否在內
     public boolean contained(int x, int y, int w, int l) {
         return w > 0 && l > 0 && width > 0 && length > 0 && x < originX && y < originY && originX + width < x + w
                 && originY + length < y + l;

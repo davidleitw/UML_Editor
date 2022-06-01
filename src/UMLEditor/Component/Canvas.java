@@ -17,10 +17,6 @@ import javax.swing.JPanel;
 import Button.BaseButton;
 
 public class Canvas extends JPanel {
-    private Strategy strategy = null;
-    private BaseButton currentBtn = null;
-    private ButtonToolBar toolBar = null;
-    
     public Canvas(ButtonToolBar toolBar) {
         this.toolBar = toolBar;
         MouseAdapter adapter = new MouseAdapter() {
@@ -69,6 +65,10 @@ public class Canvas extends JPanel {
         strategy().paint(graph);
     }
     
+    private Strategy strategy = null;
+    private BaseButton currentBtn = null;
+    private ButtonToolBar toolBar = null;
+
     public Strategy strategy() {
         if (strategy == null)
             strategy = new Strategy();
@@ -93,14 +93,9 @@ public class Canvas extends JPanel {
             graph.setColor(defaultBackground);
 
             if (!selecting && mouseDragging()) {
-                int lx = originPoint.x;
-                int ly = originPoint.y;
-                int offsetx = offsetPoint.x - lx;
-                int offsety = offsetPoint.y - ly;
-
-                graph.drawRoundRect(lx, ly, offsetx, offsety, 20, 20);
+                graph.drawRoundRect(lx, ly, ox, oy, 20, 20);
                 graph.setColor(draggingBackground);
-                graph.fillRoundRect(lx, ly, offsetx, offsety, 20, 20);
+                graph.fillRoundRect(lx, ly, ox, oy, 20, 20);
                 graph.setColor(defaultBackground);
             }
 
@@ -147,11 +142,12 @@ public class Canvas extends JPanel {
         }
 
         public void selectMouseDragged(Point offset) {
-            int ox = offset.x - offsetPoint.x;
-            int oy = offset.y - offsetPoint.y;
+            // 這裡的 ox, oy 計算跟上一次的 offsetPoint 差多遠(計算出物件需要平移多少單位)
+            ox = offset.x - offsetPoint.x;
+            oy = offset.y - offsetPoint.y;
             setmouseDragging(true);
             setOffsetPoint(offset);
-
+            // 移動物件的邏輯
             if (selecting) {
                 moveSelectingObjects(ox, oy);
                 repaint();
@@ -159,9 +155,14 @@ public class Canvas extends JPanel {
             }
 
             clearSelectObject();
+            // 這裡的 ox, oy 則是算出新的 offsetPoint 與 originPoint 的差異
+            ox = Math.abs(offsetPoint.x - originPoint.x);
+            oy = Math.abs(offsetPoint.y - originPoint.y);
+            // lx, ly 代表"左上角"的座標，因為拖拉的時候要畫出選擇框，需要左上角的座標
+            lx = Math.min(originPoint.x, offsetPoint.x);
+            ly = Math.min(originPoint.y, offsetPoint.y);
             for (BasicObject obj : BasicObjects) {
-                if (obj.contained(originPoint.x, originPoint.y, offsetPoint.x - originPoint.x,
-                        offsetPoint.y - originPoint.y)) {
+                if (obj.contained(lx, ly, ox, oy)) {
                     SelectingObjects.add(obj);
                 }
             }
@@ -319,6 +320,10 @@ public class Canvas extends JPanel {
             repaint();
         }
 
+        private int ox;
+        private int oy;
+        private int lx;
+        private int ly;
         private boolean drawing;
         private boolean dragging;
         private boolean selecting;

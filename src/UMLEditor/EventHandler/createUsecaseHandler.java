@@ -5,9 +5,9 @@ import Object.UseCaseObject;
 import java.awt.event.MouseEvent;
 
 public class createUsecaseHandler implements eventHandler {
-    public void mousePressed(Canvas c, MouseEvent e) {}
-    public void mouseDragged(Canvas c, MouseEvent e) {}
-    public void mouseReleased(Canvas c, MouseEvent e) {
+    public void handlePressedEvent(Canvas c, MouseEvent e) {}
+    public void handleDraggedEvent(Canvas c, MouseEvent e) {}
+    public void handleReleasedEvent(Canvas c, MouseEvent e) {
         c.strategy().addSelectableObject(new UseCaseObject(e.getPoint(), 0));
     }
 }

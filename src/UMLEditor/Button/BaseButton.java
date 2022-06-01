@@ -42,15 +42,15 @@ public class BaseButton extends JButton {
     }
 
     public void mousePressedEvent(Canvas c, MouseEvent e) {
-        handler.mousePressed(c, e);
+        handler.handlePressedEvent(c, e);
     }
 
     public void mouseReleasedEvent(Canvas c, MouseEvent e) {
-        handler.mouseReleased(c, e);
+        handler.handleReleasedEvent(c, e);
     }
 
     public void mouseDraggedEvent(Canvas c, MouseEvent e) {
-        handler.mouseDragged(c, e);
+        handler.handleDraggedEvent(c, e);
     }
 
     private eventHandler handler;
