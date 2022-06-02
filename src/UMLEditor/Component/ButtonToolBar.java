@@ -3,12 +3,10 @@ package Component;
 import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JToolBar;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import Button.BaseButton;
 
-public class ButtonToolBar extends JToolBar implements ActionListener {
+public class ButtonToolBar extends JToolBar {
     BaseButton currentBtn_ = null;
 
     public ButtonToolBar(String name, int orientation) {
@@ -41,10 +39,5 @@ public class ButtonToolBar extends JToolBar implements ActionListener {
 
     private void setCurrentBtn(BaseButton btn) {
         currentBtn_ = btn;
-    }
-
-    
-    public void actionPerformed(ActionEvent e) {
-        System.out.println(e.getSource());
     }
 }

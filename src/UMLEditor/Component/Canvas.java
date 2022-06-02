@@ -163,7 +163,7 @@ public class Canvas extends JPanel {
             lx = Math.min(originPoint.x, offsetPoint.x);
             ly = Math.min(originPoint.y, offsetPoint.y);
             for (BasicObject obj : basicObjects) {
-                if (obj.contained(lx, ly, ox, oy)) {
+                if (obj.contain(lx, ly, ox, oy)) {
                     selectingObjects.add(obj);
                 }
             }
@@ -213,6 +213,7 @@ public class Canvas extends JPanel {
         public void createLineMousePressed(Point p, Line line) {
             setOriginPoint(p);
             clearSelectObject();
+            
             BasicObject source = getOverlapObject(p);
             if (source == null) {
                 return;
@@ -298,11 +299,7 @@ public class Canvas extends JPanel {
         }
 
         public void ungroupObject() {
-            if (selectingObjects.size() != 1) {
-                return;
-            }
-
-            if (selectingObjects.get(0) instanceof GroupObject) {
+            if (selectingObjects.size() == 1 && selectingObjects.get(0) instanceof GroupObject) {
                 GroupObject group = (GroupObject) selectingObjects.get(0);
                 clearSelectObject();
                 group.decompose(basicObjects);
@@ -314,8 +311,8 @@ public class Canvas extends JPanel {
                         iter.remove();
                     }
                 }
+                repaint();
             }
-            repaint();
         }
 
         private int ox;
@@ -323,7 +320,7 @@ public class Canvas extends JPanel {
         private int lx;
         private int ly;
         private boolean dragging;
-        private boolean selecting;
+        private boolean selecting; // 判斷滑鼠拖拉的行為(拖動某個物件，或者範圍選取)
         private Point originPoint;
         private Point offsetPoint;
         private Line creatingLine;
