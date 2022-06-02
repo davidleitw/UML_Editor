@@ -77,9 +77,9 @@ public class Canvas extends JPanel {
 
     public class Strategy {
         public Strategy() {
-            LineObjects = new ArrayList<Line>();
-            BasicObjects = new ArrayList<BasicObject>();
-            SelectingObjects = new ArrayList<BasicObject>();
+            lineObjects = new ArrayList<Line>();
+            basicObjects = new ArrayList<BasicObject>();
+            selectingObjects = new ArrayList<BasicObject>();
 
             cleanBackground = Color.WHITE;
             defaultBackground = new Color(16777216);
@@ -99,15 +99,15 @@ public class Canvas extends JPanel {
                 graph.setColor(defaultBackground);
             }
 
-            if (mouseDrawing()) {
+            if (creatingLine != null) {
                 graph.drawLine(originPoint.x, originPoint.y, offsetPoint.x, offsetPoint.y);
             }
 
-            for (BasicObject obj : BasicObjects) {
+            for (BasicObject obj : basicObjects) {
                 obj.draw(graph);
             }
 
-            for (Line line : LineObjects) {
+            for (Line line : lineObjects) {
                 line.draw(graph);
             }
         }
@@ -120,8 +120,9 @@ public class Canvas extends JPanel {
             offsetPoint = p;
         }
 
-        private BasicObject pressedOverlapObject(Point p) {
-            for (BasicObject object : BasicObjects) {
+        // 查看滑鼠單擊的位置是否跟物件重疊，如果重疊則回傳該物件
+        private BasicObject getOverlapObject(Point p) {
+            for (BasicObject object : basicObjects) {
                 if (object.contain(p.x, p.y)) {
                     return object;
                 }
@@ -133,10 +134,10 @@ public class Canvas extends JPanel {
             clearSelectObject();
             setOriginPoint(p);
             setOffsetPoint(p);
-            BasicObject obj = pressedOverlapObject(p);
+            BasicObject obj = getOverlapObject(p);
             if (obj != null) {
                 selecting = true;
-                SelectingObjects.add(obj);
+                selectingObjects.add(obj);
             }
             repaint();
         }
@@ -149,11 +150,11 @@ public class Canvas extends JPanel {
             setOffsetPoint(offset);
             // 移動物件的邏輯
             if (selecting) {
-                moveSelectingObjects(ox, oy);
+                moveselectingObjects(ox, oy);
                 repaint();
                 return;
             }
-
+   
             clearSelectObject();
             // 這裡的 ox, oy 則是算出新的 offsetPoint 與 originPoint 的差異
             ox = Math.abs(offsetPoint.x - originPoint.x);
@@ -161,9 +162,9 @@ public class Canvas extends JPanel {
             // lx, ly 代表"左上角"的座標，因為拖拉的時候要畫出選擇框，需要左上角的座標
             lx = Math.min(originPoint.x, offsetPoint.x);
             ly = Math.min(originPoint.y, offsetPoint.y);
-            for (BasicObject obj : BasicObjects) {
+            for (BasicObject obj : basicObjects) {
                 if (obj.contained(lx, ly, ox, oy)) {
-                    SelectingObjects.add(obj);
+                    selectingObjects.add(obj);
                 }
             }
             repaint();
@@ -177,7 +178,7 @@ public class Canvas extends JPanel {
         }
 
         private void setObjectSelectTag() {
-            for (BasicObject selectobj : SelectingObjects) {
+            for (BasicObject selectobj : selectingObjects) {
                 selectobj.select(true);
             }
         }
@@ -190,37 +191,29 @@ public class Canvas extends JPanel {
             return dragging;
         }
 
-        private void setmouseDrawing(boolean exist) {
-            drawing = exist;
-        }
-
-        private boolean mouseDrawing() {
-            return drawing;
-        }
-
-        public void addSelectableObject(BasicObject obj) {
-            BasicObjects.add(obj);
-            repaint();
-        }
-
         private void clearSelectObject() {
             selecting = false;
-            for (BasicObject selectobj : SelectingObjects) {
+            for (BasicObject selectobj : selectingObjects) {
                 selectobj.select(false);
             }
-            SelectingObjects.clear();
+            selectingObjects.clear();
         }
 
-        private void moveSelectingObjects(int offsetx, int offsety) {
-            for (BasicObject selectobj : SelectingObjects) {
+        private void moveselectingObjects(int offsetx, int offsety) {
+            for (BasicObject selectobj : selectingObjects) {
                 selectobj.move(offsetx, offsety);
             }
+        }
+
+        public void createBasicObject(BasicObject obj) {
+            basicObjects.add(obj);
+            repaint();
         }
 
         public void createLineMousePressed(Point p, Line line) {
             setOriginPoint(p);
             clearSelectObject();
-            BasicObject source = pressedOverlapObject(p);
+            BasicObject source = getOverlapObject(p);
             if (source == null) {
                 return;
             }
@@ -230,7 +223,6 @@ public class Canvas extends JPanel {
         }
 
         public void createLineMouseDragged(Point p) {
-            setmouseDrawing(true);
             if (originPoint != null) {
                 setOffsetPoint(p);
             }
@@ -238,54 +230,60 @@ public class Canvas extends JPanel {
         }
 
         public void createLineMouseReleased(Point p) {
-            setmouseDrawing(false);
-            BasicObject destination = pressedOverlapObject(p);
+            BasicObject destination = getOverlapObject(p);
+
+            // @creatingLine == null 代表一開始滑鼠點擊沒有點選到物件
+            // @destination == null 代表滑鼠放開的瞬間沒有在物件上面
+            // @creatingLine.getSource() == destination 為特例，代表線自己連到自己身上，目前的設計是不允許的
             if (creatingLine == null || destination == null || creatingLine.getSource() == destination) {
                 creatingLine = null;
                 repaint();
                 return;
             }
+
             creatingLine.setDestination(destination, destination.getClosestPortIndex(p));
-            LineObjects.add(creatingLine);
+            lineObjects.add(creatingLine);
             creatingLine = null;
             setOriginPoint(null);
             setOffsetPoint(null);
             repaint();
         }
 
+        // 只有單選物件的時候能改變物件名稱
         public boolean canChangeClassName() {
-            return (SelectingObjects.size()) == 1 && (SelectingObjects.get(0) instanceof ClassObject);
+            return (selectingObjects.size()) == 1 && (selectingObjects.get(0) instanceof ClassObject);
         }
 
+        // 只有單選物件的時候能改變物件名稱
         public boolean canChangeCaseName() {
-            return (SelectingObjects.size()) == 1 && (SelectingObjects.get(0) instanceof UseCaseObject);
+            return (selectingObjects.size()) == 1 && (selectingObjects.get(0) instanceof UseCaseObject);
         }
 
         public String getClassName() {
-            return ((ClassObject) SelectingObjects.get(0)).getClassName();
+            return ((ClassObject) selectingObjects.get(0)).getClassName();
         }
 
         public String getCaseName() {
-            return ((UseCaseObject) SelectingObjects.get(0)).getCaseName();
+            return ((UseCaseObject) selectingObjects.get(0)).getCaseName();
         }
 
         public void changeObjectName(String name) {
-            ((ClassObject) SelectingObjects.get(0)).setClassName(name);
+            ((ClassObject) selectingObjects.get(0)).setClassName(name);
             repaint();
         }
 
         public void changeCaseName(String name) {
-            ((UseCaseObject) SelectingObjects.get(0)).setCaseName(name);
+            ((UseCaseObject) selectingObjects.get(0)).setCaseName(name);
             repaint();
         }
 
         public void groupObject() {
-            if (SelectingObjects.size() < 2) {
+            if (selectingObjects.size() < 2) {
                 return;
             }
 
-            Iterator<BasicObject> iter = BasicObjects.iterator();
-            HashSet<BasicObject> selectingObjs = new HashSet<BasicObject>(SelectingObjects);
+            Iterator<BasicObject> iter = basicObjects.iterator();
+            HashSet<BasicObject> selectingObjs = new HashSet<BasicObject>(selectingObjects);
             while (iter.hasNext()) {
                 if (selectingObjs.contains(iter.next())) {
                     iter.remove();
@@ -293,23 +291,23 @@ public class Canvas extends JPanel {
             }
 
             GroupObject group = new GroupObject();
-            group.makeGroup(SelectingObjects);
-            BasicObjects.add(group);
-            SelectingObjects.add(group);
+            group.makeGroup(selectingObjects);
+            basicObjects.add(group);
+            selectingObjects.add(group);
             repaint();
         }
 
         public void ungroupObject() {
-            if (SelectingObjects.size() != 1) {
+            if (selectingObjects.size() != 1) {
                 return;
             }
 
-            if (SelectingObjects.get(0) instanceof GroupObject) {
-                GroupObject group = (GroupObject) SelectingObjects.get(0);
+            if (selectingObjects.get(0) instanceof GroupObject) {
+                GroupObject group = (GroupObject) selectingObjects.get(0);
                 clearSelectObject();
-                group.decompose(BasicObjects);
+                group.decompose(basicObjects);
 
-                Iterator<Line> iter = LineObjects.iterator();
+                Iterator<Line> iter = lineObjects.iterator();
                 while (iter.hasNext()) {
                     Line l = iter.next();
                     if (l.getSource() == group || l.getDestination() == group) {
@@ -324,7 +322,6 @@ public class Canvas extends JPanel {
         private int oy;
         private int lx;
         private int ly;
-        private boolean drawing;
         private boolean dragging;
         private boolean selecting;
         private Point originPoint;
@@ -333,8 +330,8 @@ public class Canvas extends JPanel {
         private Color cleanBackground;
         private Color defaultBackground;
         private Color draggingBackground;
-        private ArrayList<Line> LineObjects;
-        private ArrayList<BasicObject> BasicObjects;
-        private ArrayList<BasicObject> SelectingObjects;
+        private ArrayList<Line> lineObjects;
+        private ArrayList<BasicObject> basicObjects;
+        private ArrayList<BasicObject> selectingObjects;
     }
 }

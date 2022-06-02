@@ -26,6 +26,7 @@ public class Menu extends JMenuBar {
                 }
             }
         });
+
         JMenuItem changeUseCaseItem = new JMenuItem("Change use case name");
         changeUseCaseItem.addActionListener(new ActionListener() {
             @Override
@@ -46,6 +47,7 @@ public class Menu extends JMenuBar {
                 cvs.strategy().groupObject();
             }
         });
+
         JMenuItem ungroupItem = new JMenuItem("Ungroup");
         ungroupItem.addActionListener(new ActionListener() {
             @Override
@@ -53,6 +55,7 @@ public class Menu extends JMenuBar {
                 cvs.strategy().ungroupObject();
             }
         });
+        
         editMenu.add(changeClassItem);
         editMenu.add(changeUseCaseItem);
         editMenu.add(groupItem);

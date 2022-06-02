@@ -32,6 +32,7 @@ public class UMLEditor extends JFrame {
         menu = new Menu(cvs);
         this.add(menu, BorderLayout.NORTH);
     }
+
     private void setToolBarLayout() {
         toolBar = new ButtonToolBar("tools", JToolBar.VERTICAL);
 
@@ -49,6 +50,7 @@ public class UMLEditor extends JFrame {
         cvs = new Canvas(this.toolBar);
         this.add(cvs, BorderLayout.CENTER);
     }
+    
     private Menu menu;
     private Canvas cvs;
     private ButtonToolBar toolBar;
